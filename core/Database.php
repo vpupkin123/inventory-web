@@ -15,29 +15,25 @@ class Database
                 mkdir(DATA_PATH, 0755, true);
             }
 
-            $isNew = !file_exists(DB_FILE);
-
             self::$pdo = new PDO('sqlite:' . DB_FILE);
             self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-            // If database was just created - initialize structure
-            if ($isNew) {
-                self::initialize();
-            }
+            // Initialize structure and data
+            self::initialize();
         }
 
         return self::$pdo;
     }
 
     /**
-     * Create tables and initial data
+     * Create tables and initial data (idempotent - safe to call multiple times)
      */
     private static function initialize(): void
     {
         $pdo = self::$pdo;
 
-        // Users table (also serves as employees)
+        // Create tables (IF NOT EXISTS - safe to run multiple times)
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS users (
                 id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -52,7 +48,6 @@ class Database
             )
         ");
 
-        // Computers table
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS computers (
                 id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -78,7 +73,6 @@ class Database
             )
         ");
 
-        // Computer transfer history
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS transfers (
                 id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -91,7 +85,6 @@ class Database
             )
         ");
 
-        // Protection against duplicate JSON uploads
         $pdo->exec("
             CREATE TABLE IF NOT EXISTS processed_uploads (
                 id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -102,23 +95,31 @@ class Database
             )
         ");
 
-        // Indexes for faster queries
+        // Create indexes
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_computers_serial ON computers(serial_number)");
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_computers_user ON computers(current_user_id)");
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_processed_uploads_hash ON processed_uploads(file_hash)");
 
-        // Create virtual "Warehouse" user
-        $pdo->exec("
-            INSERT INTO users (login, password_hash, last_name, first_name, role, must_change_pwd)
-            VALUES (?, NULL, 'Warehouse', '', 'none', 0)
-        ", [WAREHOUSE_LOGIN]);
+        // Check if warehouse user exists, create if not
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE login = ?");
+        $stmt->execute([WAREHOUSE_LOGIN]);
+        if (!$stmt->fetch()) {
+            $pdo->exec("
+                INSERT INTO users (login, password_hash, last_name, first_name, role, must_change_pwd)
+                VALUES (?, NULL, 'Warehouse', '', 'none', 0)
+            ", [WAREHOUSE_LOGIN]);
+        }
 
-        // Create first administrator (password: 'password')
-        $adminHash = password_hash('password', PASSWORD_DEFAULT);
-        $pdo->exec("
-            INSERT INTO users (login, password_hash, last_name, first_name, role, must_change_pwd)
-            VALUES (?, ?, 'Admin', 'Admin', 'admin', 1)
-        ", ['admin', $adminHash]);
+        // Check if admin user exists, create if not
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE login = ?");
+        $stmt->execute(['admin']);
+        if (!$stmt->fetch()) {
+            $adminHash = password_hash('password', PASSWORD_DEFAULT);
+            $pdo->exec("
+                INSERT INTO users (login, password_hash, last_name, first_name, role, must_change_pwd)
+                VALUES (?, ?, 'Admin', 'Admin', 'admin', 1)
+            ", ['admin', $adminHash]);
+        }
     }
 
     /**
