@@ -1,0 +1,22 @@
+# Database files (contain real data)
+data/*.db
+data/*.db-journal
+data/*.db-shm
+data/*.db-wal
+
+# User-uploaded JSON files (temporary)
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Composer
+vendor/
+composer.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+Thumbs.db
+.DS_Store
