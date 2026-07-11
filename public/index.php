@@ -1,4 +1,10 @@
 <?php
+
+// Uncomment to catch the errors:
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+
+
 // Single entry point for the application
 
 // Load configuration

@@ -136,8 +136,10 @@ class Database
         $pdo = self::$pdo;
 
         // Add reported_by column to computers table if not exists
-        $columns = $pdo->query("PRAGMA table_info(computers)")->fetchAll(PDO::FETCH_COLUMN);
-        if (!in_array('reported_by', $columns)) {
+        $columns = $pdo->query("PRAGMA table_info(computers)")->fetchAll(PDO::FETCH_ASSOC);
+        $columnNames = array_column($columns, 'name');
+        
+        if (!in_array('reported_by', $columnNames)) {
             $pdo->exec("ALTER TABLE computers ADD COLUMN reported_by TEXT DEFAULT ''");
         }
     }
