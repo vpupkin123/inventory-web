@@ -98,6 +98,7 @@
         <div class="form-group">
             <label>Login:</label>
             <input type="text" id="modal_login" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
+            <span id="modal_login_status" style="margin-left: 10px; font-size: 0.9em;"></span>
         </div>
         <br>
         <button type="button" id="modal_save" class="btn"><?= Lang::t('processing.save') ?></button>
@@ -107,6 +108,8 @@
 
 <script>
 let currentConfigId = null;
+let checkLoginTimeout;
+let lastCheckedLogin = '';
 
 // Transliteration map
 const transMap = {
@@ -128,18 +131,95 @@ function transliterate(text) {
     return result;
 }
 
-function generateLoginFromModal() {
+async function checkLoginAvailability(login) {
+    if (!login || login === lastCheckedLogin) {
+        return false;
+    }
+    
+    try {
+        const response = await fetch(`/api/check-login?login=${encodeURIComponent(login)}`);
+        const data = await response.json();
+        lastCheckedLogin = login;
+        return data.available;
+    } catch (error) {
+        console.error('Error checking login:', error);
+        return false;
+    }
+}
+
+async function generateLoginFromModal() {
     const ln = document.getElementById('modal_last_name').value.trim();
     const fn = document.getElementById('modal_first_name').value.trim();
     const mn = document.getElementById('modal_middle_name').value.trim();
     
-    if (!ln || !fn) return;
+    if (!ln || !fn) {
+        document.getElementById('modal_login_status').textContent = '';
+        return;
+    }
     
-    let login = transliterate(ln).toLowerCase() + '.' + transliterate(fn).charAt(0).toLowerCase();
-    if (mn) login += transliterate(mn).charAt(0).toLowerCase();
-    login = login.replace(/[^a-z0-9.]/g, '');
+    const lnTranslit = transliterate(ln).toLowerCase();
+    const fnTranslit = transliterate(fn).toLowerCase();
+    const mnTranslit = transliterate(mn).toLowerCase();
     
-    document.getElementById('modal_login').value = login;
+    // Try different variations until we find an available one
+    const variations = [
+        lnTranslit + '.' + fnTranslit.charAt(0) + mnTranslit.charAt(0),
+        lnTranslit + '.' + fnTranslit.charAt(0) + fnTranslit.charAt(1) + mnTranslit.charAt(0),
+        lnTranslit + '.' + fnTranslit.charAt(0) + mnTranslit.charAt(0) + mnTranslit.charAt(1),
+        lnTranslit + '.' + fnTranslit.charAt(0) + fnTranslit.charAt(1) + fnTranslit.charAt(2),
+    ];
+    
+    let finalLogin = '';
+    for (const variation of variations) {
+        const cleanLogin = variation.replace(/[^a-z0-9.]/g, '');
+        if (await checkLoginAvailability(cleanLogin)) {
+            finalLogin = cleanLogin;
+            break;
+        }
+    }
+    
+    // If all variations taken, add number
+    if (!finalLogin) {
+        const baseLogin = variations[0].replace(/[^a-z0-9.]/g, '');
+        let counter = 2;
+        while (counter < 100) {
+            const numberedLogin = baseLogin + counter;
+            if (await checkLoginAvailability(numberedLogin)) {
+                finalLogin = numberedLogin;
+                break;
+            }
+            counter++;
+        }
+    }
+    
+    if (finalLogin) {
+        document.getElementById('modal_login').value = finalLogin;
+        updateModalLoginStatus(true, 'Login is available', 'green');
+    } else {
+        updateModalLoginStatus(false, 'Could not generate unique login', 'red');
+    }
+}
+
+function updateModalLoginStatus(available, message, color) {
+    const statusEl = document.getElementById('modal_login_status');
+    if (statusEl) {
+        statusEl.textContent = message;
+        statusEl.style.color = color;
+    }
+}
+
+async function checkManualLogin() {
+    const login = document.getElementById('modal_login').value.trim();
+    if (!login) {
+        updateModalLoginStatus(false, '', '');
+        return;
+    }
+    
+    clearTimeout(checkLoginTimeout);
+    checkLoginTimeout = setTimeout(async () => {
+        const available = await checkLoginAvailability(login);
+        updateModalLoginStatus(available, available ? 'Login is available' : 'Login already exists', available ? 'green' : 'red');
+    }, 500);
 }
 
 // Show/Hide Settings button based on checkbox
@@ -151,7 +231,6 @@ document.querySelectorAll('.create_user_checkbox').forEach(cb => {
             btn.style.display = 'inline-block';
         } else {
             btn.style.display = 'none';
-            // Reset configuration if unchecked
             document.getElementById(`cfg_status_${id}`).value = '0';
             document.querySelector(`.configured_status[data-id="${id}"]`).style.display = 'none';
             btn.style.background = '#ffc107';
@@ -164,9 +243,8 @@ document.querySelectorAll('.settings_btn').forEach(btn => {
     btn.addEventListener('click', function() {
         currentConfigId = this.dataset.id;
         const row = document.getElementById(`row_${currentConfigId}`);
-        const reportedBy = row.cells[3].innerText.trim(); // Get FIO from table
+        const reportedBy = row.cells[3].innerText.trim();
         
-        // Parse FIO (simple split by space)
         const parts = reportedBy.split(/\s+/);
         document.getElementById('modal_last_name').value = document.getElementById(`cfg_last_${currentConfigId}`).value || parts[0] || '';
         document.getElementById('modal_first_name').value = document.getElementById(`cfg_first_${currentConfigId}`).value || parts[1] || '';
@@ -174,6 +252,8 @@ document.querySelectorAll('.settings_btn').forEach(btn => {
         document.getElementById('modal_login').value = document.getElementById(`cfg_login_${currentConfigId}`).value || '';
         
         document.getElementById('userModal').style.display = 'block';
+        
+        // Auto-generate login on modal open
         generateLoginFromModal();
     });
 });
@@ -196,14 +276,12 @@ document.getElementById('modal_save').addEventListener('click', () => {
         return;
     }
     
-    // Save to hidden inputs
     document.getElementById(`cfg_last_${currentConfigId}`).value = ln;
     document.getElementById(`cfg_first_${currentConfigId}`).value = fn;
     document.getElementById(`cfg_middle_${currentConfigId}`).value = document.getElementById('modal_middle_name').value.trim();
     document.getElementById(`cfg_login_${currentConfigId}`).value = login;
     document.getElementById(`cfg_status_${currentConfigId}`).value = '1';
     
-    // Update UI
     const btn = document.querySelector(`.settings_btn[data-id="${currentConfigId}"]`);
     btn.style.background = '#28a745';
     btn.style.color = '#fff';
@@ -230,4 +308,10 @@ document.getElementById('processing_form').addEventListener('submit', function(e
 document.getElementById('select_all').addEventListener('change', function() {
     document.querySelectorAll('.row_checkbox').forEach(cb => cb.checked = this.checked);
 });
+
+// Add input listeners for auto-generation
+document.getElementById('modal_last_name').addEventListener('input', generateLoginFromModal);
+document.getElementById('modal_first_name').addEventListener('input', generateLoginFromModal);
+document.getElementById('modal_middle_name').addEventListener('input', generateLoginFromModal);
+document.getElementById('modal_login').addEventListener('input', checkManualLogin);
 </script>
