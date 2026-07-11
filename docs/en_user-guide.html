@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Web — User Guide</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; line-height: 1.7; color: #333; background: #f5f7fa; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 20px; text-align: center; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.2em; opacity: 0.9; }
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        .toc { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .toc h2 { margin-bottom: 15px; color: #667eea; }
+        .toc ol { margin-left: 25px; }
+        .toc li { margin: 8px 0; }
+        .toc a { color: #667eea; text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .section { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.8em; }
+        h3 { color: #764ba2; margin: 20px 0 10px 0; font-size: 1.3em; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 25px; margin-bottom: 15px; }
+        li { margin-bottom: 6px; }
+        .note { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .tip { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: "Consolas", monospace; color: #d63384; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; margin: 15px 0; font-family: "Consolas", monospace; font-size: 0.9em; line-height: 1.5; }
+        pre code { background: transparent; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background: #667eea; color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .step { background: #f8f9fa; padding: 15px; border-left: 3px solid #667eea; margin: 15px 0; }
+        .step-number { display: inline-block; background: #667eea; color: white; width: 30px; height: 30px; line-height: 30px; text-align: center; border-radius: 50%; margin-right: 10px; font-weight: bold; }
+        .footer { text-align: center; padding: 30px; color: #666; font-size: 0.9em; }
+        .footer a { color: #667eea; text-decoration: none; }
+        @media print { .header { background: #667eea !important; } .section { box-shadow: none; border: 1px solid #ddd; } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1> Inventory Web</h1>
+    <p>User Guide</p>
+</div>
+
+<div class="container">
+
+    <div class="toc">
+        <h2>📑 Table of Contents</h2>
+        <ol>
+            <li><a href="#intro">Introduction</a></li>
+            <li><a href="#login">Login</a></li>
+            <li><a href="#password">Change Password</a></li>
+            <li><a href="#language">Language Switching</a></li>
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#reports">Uploading Reports</a></li>
+            <li><a href="#processing">Processing Queue</a></li>
+            <li><a href="#computers">Computer Registry</a></li>
+            <li><a href="#computer-card">Computer Card</a></li>
+            <li><a href="#transfer">Transfer Computer</a></li>
+            <li><a href="#history">Transfer History</a></li>
+            <li><a href="#users">User Management</a></li>
+            <li><a href="#scripts">Administrative Scripts</a></li>
+            <li><a href="#export">Excel Export</a></li>
+        </ol>
+    </div>
+
+    <div class="section" id="intro">
+        <h2>1. Introduction</h2>
+        <p><strong>Inventory Web</strong> is a web application for tracking computer equipment in an organization. The system allows you to:</p>
+        <ul>
+            <li>Upload computer data from JSON reports collected on client machines</li>
+            <li>Automatically create employee accounts</li>
+            <li>Assign computers to specific users or store them in a virtual warehouse</li>
+            <li>Maintain a complete history of all equipment movements</li>
+            <li>Export data to Excel for reporting purposes</li>
+        </ul>
+        <div class="note">
+            <strong>💡 Note:</strong> The application supports two interface languages — Russian and English. You can switch languages at any time via the menu in the top right corner.
+        </div>
+    </div>
+
+    <div class="section" id="login">
+        <h2>2. Login</h2>
+        <div class="step">
+            <span class="step-number">1</span> Open the system URL in your browser (e.g., <code>http://inventory-web/</code>)
+        </div>
+        <div class="step">
+            <span class="step-number">2</span> Enter your login and password
+        </div>
+        <div class="step">
+            <span class="step-number">3</span> Click the <strong>"Login"</strong> button
+        </div>
+        <div class="warning">
+            <strong>️ Important:</strong> On your first login, the system will prompt you to change your temporary password. This is a mandatory security step.
+        </div>
+    </div>
+
+    <div class="section" id="password">
+        <h2>3. Change Password</h2>
+        <p>If the system redirected you to the password change page:</p>
+        <div class="step">
+            <span class="step-number">1</span> Enter a new password (minimum 6 characters)
+        </div>
+        <div class="step">
+            <span class="step-number">2</span> Repeat the password for confirmation
+        </div>
+        <div class="step">
+            <span class="step-number">3</span> Click <strong>"Change Password"</strong>
+        </div>
+        <div class="tip">
+            <strong>✅ Tip:</strong> Use a strong password containing uppercase and lowercase letters, numbers, and special characters.
+        </div>
+    </div>
+
+    <div class="section" id="language">
+        <h2>4. Language Switching</h2>
+        <p>In the top right corner of the navigation bar, there is a dropdown menu with flags:</p>
+        <ul>
+            <li>🇬🇧 <strong>EN</strong> — English</li>
+            <li>🇷🇺 <strong>RU</strong> — Russian</li>
+        </ul>
+        <p>The selected language is saved for your account and will be used on subsequent logins.</p>
+    </div>
+
+    <div class="section" id="dashboard">
+        <h2>5. Dashboard</h2>
+        <p>After logging in, you'll be taken to the dashboard, which contains:</p>
+        
+        <h3>📊 Statistics</h3>
+        <ul>
+            <li><strong>Total Computers</strong> — total number of PCs in the database</li>
+            <li><strong>Assigned</strong> — computers assigned to employees</li>
+            <li><strong>On Warehouse</strong> — available computers awaiting assignment</li>
+            <li><strong>Unprocessed</strong> — new reports requiring processing</li>
+            <li><strong>Total Users</strong> — number of user accounts in the system</li>
+        </ul>
+
+        <h3>⚡ Quick Actions</h3>
+        <p>Buttons for the most common operations:</p>
+        <ul>
+            <li><strong>Process Queue</strong> — go to report processing (appears if there are unprocessed items)</li>
+            <li><strong>Upload Report</strong> — upload a new JSON file</li>
+            <li><strong>View Computers</strong> — open the equipment registry</li>
+            <li><strong>Manage Users</strong> — available only to administrators</li>
+        </ul>
+
+        <h3> Recent Activity</h3>
+        <p>Two tables show the last 5 report uploads and the last 5 computer transfers.</p>
+    </div>
+
+    <div class="section" id="reports">
+        <h2>6. Uploading Reports</h2>
+        <p>JSON reports are generated by the client application on employee computers and contain complete information about hardware, OS, and network.</p>
+
+        <h3>How to upload a report:</h3>
+        <div class="step">
+            <span class="step-number">1</span> Navigate to <strong>"Reports"</strong> in the top menu
+        </div>
+        <div class="step">
+            <span class="step-number">2</span> Click the <strong>"Upload new report"</strong> button
+        </div>
+        <div class="step">
+            <span class="step-number">3</span> Select the JSON file on your computer
+        </div>
+        <div class="step">
+            <span class="step-number">4</span> Click <strong>"Upload"</strong>
+        </div>
+
+        <div class="note">
+            <strong>💡 Duplicate Protection:</strong> The system automatically calculates the file hash and prevents uploading the same report twice. If you try to upload an existing file, you'll see an appropriate message.
+        </div>
+
+        <h3>What happens after upload:</h3>
+        <ul>
+            <li>The file is saved in the system</li>
+            <li>Data is extracted and filtered (USB devices are ignored)</li>
+            <li>The computer is added to the <strong>processing queue</strong> with "New" status</li>
+            <li>The computer is temporarily assigned to the virtual warehouse</li>
+        </ul>
+    </div>
+
+    <div class="section" id="processing">
+        <h2>7. Processing Queue</h2>
+        <p>This is the key section for administrators. Here, new computers from reports are processed.</p>
+
+        <h3>Actions with computers in the queue:</h3>
+        <ul>
+            <li><strong>Select with checkboxes</strong> the computers you want to process (or use "Select All")</li>
+            <li><strong>Add a comment</strong> for each PC (e.g., "Half-dead PC", "Ivanov's PC")</li>
+            <li><strong>Check "Create New User"</strong> if you need to create an account for the PC owner</li>
+            <li>If the checkbox is checked — a <strong>"Settings"</strong> button will appear</li>
+        </ul>
+
+        <h3>Configuring a new user:</h3>
+        <div class="step">
+            <span class="step-number">1</span> Click the <strong>"Settings"</strong> button
+        </div>
+        <div class="step">
+            <span class="step-number">2</span> In the opened window, correct the full name (e.g., remove the word "Warehouse")
+        </div>
+        <div class="step">
+            <span class="step-number">3</span> The login will be auto-generated according to GOST standard (e.g., <code>ivanov.ii</code>)
+        </div>
+        <div class="step">
+            <span class="step-number">4</span> If the login is already taken — the system will automatically select a unique variant
+        </div>
+        <div class="step">
+            <span class="step-number">5</span> Click <strong>"Save"</strong>
+        </div>
+
+        <div class="warning">
+            <strong>️ Important:</strong> You cannot click "Process Selected" until all users with "Create New User" checked have been configured.
+        </div>
+
+        <p>After clicking <strong>"Process Selected"</strong>:</p>
+        <ul>
+            <li>For PCs with "Create New User" checked — a user account is created, and the PC is assigned to the new user</li>
+            <li>For other PCs — they remain on the warehouse but are marked as "Processed"</li>
+        </ul>
+    </div>
+
+    <div class="section" id="computers">
+        <h2>8. Computer Registry</h2>
+        <p>The <strong>"Computers"</strong> section shows all PCs ever uploaded to the system.</p>
+        
+        <h3>The table contains:</h3>
+        <ul>
+            <li><strong>ID</strong> — unique number</li>
+            <li><strong>PC Name</strong> — network computer name</li>
+            <li><strong>Current Owner</strong> — user login or "Warehouse"</li>
+            <li><strong>Status</strong> — "New" or "Processed"</li>
+            <li><strong>Actions</strong> — "View" and "Transfer" buttons</li>
+        </ul>
+
+        <div class="tip">
+            <strong>✅ Export:</strong> In the top right corner, there's an <strong>"Export to Excel"</strong> button to download the entire registry.
+        </div>
+    </div>
+
+    <div class="section" id="computer-card">
+        <h2>9. Computer Card</h2>
+        <p>Detailed information about a specific PC, including:</p>
+        <ul>
+            <li>Serial number</li>
+            <li>Motherboard</li>
+            <li>Processor (model, cores, threads)</li>
+            <li>RAM (total size and modules)</li>
+            <li>Storage devices (excluding USB devices)</li>
+            <li>Operating system</li>
+            <li>IP address</li>
+            <li><strong>Current owner</strong></li>
+            <li>Reported by (who submitted the report)</li>
+            <li>Comment</li>
+            <li>Date added to database</li>
+        </ul>
+        <p>From the card, you can proceed to transfer the computer or return to the list.</p>
+    </div>
+
+    <div class="section" id="transfer">
+        <h2>10. Transfer Computer</h2>
+        <p>Through this form, you can change the computer's owner.</p>
+
+        <h3>Possible scenarios:</h3>
+        <ul>
+            <li><strong>From Warehouse → Employee:</strong> select a user from the list</li>
+            <li><strong>From Employee → Employee:</strong> select another user</li>
+            <li><strong>From Employee → Warehouse:</strong> check "Return to Warehouse"</li>
+        </ul>
+
+        <div class="step">
+            <span class="step-number">1</span> The <strong>"From"</strong> field shows the current owner
+        </div>
+        <div class="step">
+            <span class="step-number">2</span> Select the new owner from the dropdown list
+        </div>
+        <div class="step">
+            <span class="step-number">3</span> Add a comment to the transfer if necessary
+        </div>
+        <div class="step">
+            <span class="step-number">4</span> Click <strong>"Confirm Transfer"</strong>
+        </div>
+
+        <div class="note">
+            <strong>💡 History:</strong> Every transfer is automatically logged in the history journal.
+        </div>
+    </div>
+
+    <div class="section" id="history">
+        <h2>11. Transfer History</h2>
+        <p>The <strong>"History"</strong> section contains a log of all equipment movements in the system.</p>
+        
+        <h3>Each record displays:</h3>
+        <ul>
+            <li><strong>Date and time</strong> of transfer</li>
+            <li><strong>Computer</strong> (name and serial number)</li>
+            <li><strong>From</strong> (previous owner or "Warehouse")</li>
+            <li><strong>To</strong> (new owner or "Warehouse")</li>
+            <li><strong>Performed by</strong> (administrator who executed the transfer)</li>
+            <li><strong>Comment</strong></li>
+        </ul>
+
+        <div class="tip">
+            <strong>✅ Export:</strong> History can also be exported to Excel.
+        </div>
+    </div>
+
+    <div class="section" id="users">
+        <h2>12. User Management</h2>
+        <div class="warning">
+            <strong>⚠️ Available only to administrators!</strong>
+        </div>
+
+        <h3>Capabilities:</h3>
+        <ul>
+            <li><strong>Create user:</strong> enter full name — login will be auto-generated according to GOST R 7.0.34-2014</li>
+            <li><strong>Edit:</strong> change full name, role, password</li>
+            <li><strong>View PCs:</strong> "Computers" button shows assigned equipment and allows adding/removing computers</li>
+            <li><strong>Delete:</strong> remove user (only if no computers are assigned to them)</li>
+        </ul>
+
+        <h3>User Roles:</h3>
+        <table>
+            <tr>
+                <th>Role</th>
+                <th>Permissions</th>
+            </tr>
+            <tr>
+                <td><strong>Administrator</strong></td>
+                <td>Full access to all functions, including user management</td>
+            </tr>
+            <tr>
+                <td><strong>Editor</strong></td>
+                <td>Upload reports, processing, computer transfers</td>
+            </tr>
+            <tr>
+                <td><strong>Viewer</strong></td>
+                <td>View-only access</td>
+            </tr>
+            <tr>
+                <td><strong>Blocked</strong></td>
+                <td>No system access</td>
+            </tr>
+        </table>
+
+        <div class="note">
+            <strong>💡 Auto-login generation:</strong> If a login already exists, the system automatically adds additional letters from the first/middle name. For example: <code>ivanov.ii</code> → <code>ivanov.iiи</code> → <code>ivanov.ivan</code> etc.
+        </div>
+    </div>
+
+    <div class="section" id="scripts">
+        <h2>13. Administrative Scripts</h2>
+        <p>The <code>admin-scripts/</code> folder contains two helper scripts for administrators:</p>
+
+        <h3>🔧 fix-permissions.sh — Fix File Permissions</h3>
+        <p>Used after each <code>git pull</code> update to restore correct file permissions.</p>
+        
+        <h4>Usage:</h4>
+        <pre><code>cd /volume1/web/inventory-web
+./admin-scripts/fix-permissions.sh</code></pre>
+
+        <h4>Parameters (optional):</h4>
+        <pre><code>./admin-scripts/fix-permissions.sh [PROJECT_PATH] [OWNER] [GROUP] [WEB_USER]</code></pre>
+
+        <p>Example with custom parameters:</p>
+        <pre><code>./admin-scripts/fix-permissions.sh /volume1/web/inventory-web myuser mygroup www-data</code></pre>
+
+        <div class="note">
+            <strong>💡 Defaults:</strong> The script automatically uses the current user and group, and <code>http</code> user for the web server.
+        </div>
+
+        <h3>🗑️ reset-inventory.sh — Reset Data</h3>
+        <p>Used to clean the database from test data. Deletes all computers, reports, and transfers, but preserves users.</p>
+        
+        <h4>Usage:</h4>
+        <pre><code>./admin-scripts/reset-inventory.sh</code></pre>
+
+        <h4>Parameters (optional):</h4>
+        <pre><code>./admin-scripts/reset-inventory.sh [PROJECT_PATH]</code></pre>
+
+        <div class="warning">
+            <strong>⚠️ Caution:</strong> The script will ask for confirmation before deleting data.
+        </div>
+    </div>
+
+    <div class="section" id="export">
+        <h2>14. Excel Export</h2>
+        <p>Export functionality is available in the sections:</p>
+        <ul>
+            <li><strong>Computers</strong> — complete equipment registry</li>
+            <li><strong>History</strong> — log of all transfers</li>
+        </ul>
+
+        <h3>How to export:</h3>
+        <div class="step">
+            <span class="step-number">1</span> Navigate to the desired section
+        </div>
+        <div class="step">
+            <span class="step-number">2</span> Click the green <strong>"Export to Excel"</strong> button
+        </div>
+        <div class="step">
+            <span class="step-number">3</span> The file will automatically download in <code>.xls</code> format
+        </div>
+        <div class="step">
+            <span class="step-number">4</span> Open the file in Microsoft Excel, LibreOffice Calc, or another spreadsheet editor
+        </div>
+
+        <div class="tip">
+            <strong>✅ Compatibility:</strong> Files correctly display Cyrillic characters and can be saved to <code>.xlsx</code> format through Excel itself.
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>Inventory Web — User Guide</p>
+    <p>Developed by <a href="https://github.com/vpupkin123" target="_blank">vpupkin123</a></p>
+</div>
+
+</body>
+</html>

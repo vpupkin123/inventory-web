@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Web — Руководство администратора</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; line-height: 1.7; color: #333; background: #f5f7fa; }
+        .header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 40px 20px; text-align: center; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.2em; opacity: 0.9; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+        .toc { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .toc h2 { margin-bottom: 15px; color: #11998e; }
+        .toc ol { margin-left: 25px; }
+        .toc li { margin: 8px 0; }
+        .toc a { color: #11998e; text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .section { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        h2 { color: #11998e; border-bottom: 2px solid #11998e; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.8em; }
+        h3 { color: #0d7a6f; margin: 20px 0 10px 0; font-size: 1.3em; }
+        h4 { color: #333; margin: 15px 0 8px 0; font-size: 1.1em; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 25px; margin-bottom: 15px; }
+        li { margin-bottom: 6px; }
+        .note { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .danger { background: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .tip { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: "Consolas", "Courier New", monospace; color: #d63384; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; margin: 15px 0; font-family: "Consolas", "Courier New", monospace; font-size: 0.9em; line-height: 1.5; }
+        pre code { background: transparent; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background: #11998e; color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .folder-tree { background: #f8f9fa; padding: 15px; border-radius: 5px; font-family: "Consolas", monospace; font-size: 0.9em; line-height: 1.6; border-left: 3px solid #11998e; }
+        .footer { text-align: center; padding: 30px; color: #666; font-size: 0.9em; }
+        .footer a { color: #11998e; text-decoration: none; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 0.85em; font-weight: bold; margin-right: 5px; }
+        .badge-php { background: #777bb4; color: white; }
+        .badge-sqlite { background: #00825d; color: white; }
+        .badge-html { background: #e34c26; color: white; }
+        .badge-js { background: #f7df1e; color: black; }
+        @media print { .header { background: #11998e !important; } .section { box-shadow: none; border: 1px solid #ddd; } pre { background: #f4f4f4; color: #333; border: 1px solid #ddd; } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>️ Inventory Web</h1>
+    <p>Руководство администратора</p>
+</div>
+
+<div class="container">
+
+    <div class="toc">
+        <h2>📑 Содержание</h2>
+        <ol>
+            <li><a href="#overview">Обзор системы</a></li>
+            <li><a href="#stack">Стек технологий</a></li>
+            <li><a href="#requirements">Системные требования</a></li>
+            <li><a href="#installation">Установка на Synology</a></li>
+            <li><a href="#structure">Структура проекта</a></li>
+            <li><a href="#database">База данных</a></li>
+            <li><a href="#permissions">Настройка прав доступа</a></li>
+            <li><a href="#roles">Роли и права пользователей</a></li>
+            <li><a href="#config">Конфигурация</a></li>
+            <li><a href="#logs">Логирование</a></li>
+            <li><a href="#backup">Резервное копирование</a></li>
+            <li><a href="#update">Обновление системы</a></li>
+            <li><a href="#troubleshooting">Решение проблем</a></li>
+        </ol>
+    </div>
+
+    <div class="section" id="overview">
+        <h2>1. Обзор системы</h2>
+        <p><strong>Inventory Web</strong> — это лёгкое веб-приложение для учёта компьютерного оборудования, разработанное специально для работы на NAS Synology без использования внешних зависимостей.</p>
+
+        <h3>Ключевые особенности:</h3>
+        <ul>
+            <li><strong>Минимализм:</strong> без фреймворков, без Composer, без тяжёлых зависимостей</li>
+            <li><strong>Автономность:</strong> всё необходимое встроено — PHP + SQLite</li>
+            <li><strong>Многоязычность:</strong> русский и английский интерфейсы</li>
+            <li><strong>Безопасность:</strong> хеширование паролей, защита от SQL-инъекций, обязательная смена пароля при первом входе</li>
+            <li><strong>Совместимость:</strong> корректная работа с файлами из Windows (обработка BOM, кириллицы)</li>
+            <li><strong>Автоматизация:</strong> автогенерация логинов по ГОСТ Р 7.0.34-2014</li>
+        </ul>
+    </div>
+
+    <div class="section" id="stack">
+        <h2>2. Стек технологий</h2>
+        
+        <h3>Серверная часть:</h3>
+        <ul>
+            <li><span class="badge badge-php">PHP 8.0+</span> — основной язык</li>
+            <li><span class="badge badge-sqlite">SQLite 3</span> — база данных (один файл <code>inventory.db</code>)</li>
+            <li><span class="badge badge-html">HTML5</span> — разметка</li>
+            <li><span class="badge badge-js">JavaScript</span> — интерактивность (валидация, AJAX)</li>
+            <li>CSS3 — стили (встроенные, без фреймворков)</li>
+        </ul>
+
+        <h3>Архитектура:</h3>
+        <ul>
+            <li><strong>MVC-подобная структура</strong> — разделение на контроллеры, представления и модели</li>
+            <li><strong>Единая точка входа</strong> — <code>public/index.php</code> + <code>.htaccess</code> для ЧПУ</li>
+            <li><strong>Собственный роутер</strong> — класс <code>App</code> обрабатывает маршруты</li>
+            <li><strong>Автозагрузчик классов</strong> — <code>Autoloader</code> для сервисов и контроллеров</li>
+            <li><strong>Система интернационализации</strong> — класс <code>Lang</code> с файлами переводов</li>
+        </ul>
+
+        <h3>Внешние зависимости:</h3>
+        <p><strong>Отсутствуют.</strong> Никаких библиотек, Composer, CDN — всё работает автономно.</p>
+    </div>
+
+    <div class="section" id="requirements">
+        <h2>3. Системные требования</h2>
+        
+        <h3>Минимальные:</h3>
+        <table>
+            <tr>
+                <th>Компонент</th>
+                <th>Требование</th>
+            </tr>
+            <tr>
+                <td>Операционная система</td>
+                <td>Linux (проверено на Synology DSM 7+)</td>
+            </tr>
+            <tr>
+                <td>Веб-сервер</td>
+                <td>Apache 2.4+ с mod_rewrite или Nginx</td>
+            </tr>
+            <tr>
+                <td>PHP</td>
+                <td>8.0 или выше (с расширениями: PDO, SQLite, JSON, mbstring)</td>
+            </tr>
+            <tr>
+                <td>SQLite</td>
+                <td>3.x (встроен в PHP)</td>
+            </tr>
+            <tr>
+                <td>Диск</td>
+                <td>~10 МБ для приложения + место для БД и загрузок</td>
+            </tr>
+            <tr>
+                <td>Память</td>
+                <td>~50 МБ RAM</td>
+            </tr>
+        </table>
+
+        <div class="note">
+            <strong>💡 Проверено на:</strong> Synology DS920+ с Web Station и PHP 8.0. Работает также на любых других Linux-серверах с аналогичным стеком.
+        </div>
+    </div>
+
+    <div class="section" id="installation">
+        <h2>4. Установка на Synology</h2>
+
+        <h3>Шаг 1: Подготовка Web Station</h3>
+        <ol>
+            <li>Установите <strong>Web Station</strong> из Package Center</li>
+            <li>Установите <strong>Apache 2.4</strong> и <strong>PHP 8.0</strong> (или выше)</li>
+            <li>Включите модуль <code>mod_rewrite</code> в настройках Apache</li>
+        </ol>
+
+        <h3>Шаг 2: Клонирование репозитория</h3>
+        <p>По SSH подключитесь к Synology и выполните:</p>
+        <pre><code>cd /volume1/web
+git clone https://github.com/vpupkin123/inventory-web.git
+cd inventory-web</code></pre>
+
+        <h3>Шаг 3: Настройка виртуального хоста</h3>
+        <ol>
+            <li>Откройте <strong>Web Station → Портал веб-сайтов</strong></li>
+            <li>Создайте новый виртуальный хост:
+                <ul>
+                    <li>Имя сервера: <code>inventory-web</code> (или ваш домен)</li>
+                    <li>Корневая папка: <code>/volume1/web/inventory-web/public</code></li>
+                    <li>PHP: <code>PHP 8.0</code></li>
+                    <li>HTTP-сервер: <code>Apache 2.4</code></li>
+                </ul>
+            </li>
+            <li>В настройках DNS или <code>/etc/hosts</code> пропишите имя сервера</li>
+        </ol>
+
+        <h3>Шаг 4: Настройка прав доступа</h3>
+        <p>В папке <code>admin-scripts/</code> находится универсальный скрипт <code>fix-permissions.sh</code> для настройки прав.</p>
+        
+        <p>Сделайте его исполняемым и запустите:</p>
+        <pre><code>chmod +x /volume1/web/inventory-web/admin-scripts/fix-permissions.sh
+cd /volume1/web/inventory-web
+./admin-scripts/fix-permissions.sh</code></pre>
+
+        <div class="note">
+            <strong>💡 Универсальность:</strong> Скрипт автоматически определяет текущего пользователя и группу. При необходимости можно передать параметры:
+            <pre><code>./admin-scripts/fix-permissions.sh /path/to/project owner group webuser</code></pre>
+        </div>
+
+        <h3>Шаг 5: Первая инициализация</h3>
+        <p>При первом обращении к сайту автоматически:</p>
+        <ul>
+            <li>Создаётся база данных <code>data/inventory.db</code></li>
+            <li>Создаётся виртуальный пользователь <code>warehouse</code> (склад)</li>
+            <li>Создаётся администратор: логин <code>admin</code>, пароль <code>password</code></li>
+        </ul>
+
+        <div class="danger">
+            <strong>🚨 ОБЯЗАТЕЛЬНО:</strong> Сразу после первого входа смените пароль администратора!
+        </div>
+    </div>
+
+    <div class="section" id="structure">
+        <h2>5. Структура проекта</h2>
+        <div class="folder-tree">
+inventory-web/
+├── admin-scripts/
+│   ├── fix-permissions.sh      # Универсальный скрипт прав
+│   └── reset-inventory.sh      # Сброс тестовых данных
+├── config/
+│   ├── config.php          # Константы и настройки
+│   └── routes.php          # Маршруты приложения
+├── controllers/
+│   ├── ApiController.php       # AJAX-эндпоинты
+│   ├── AuthController.php      # Аутентификация
+│   ├── ComputerController.php  # Реестр ПК
+│   ├── DashboardController.php # Главная страница
+│   ├── LangController.php      # Смена языка
+│   ├── ProcessingController.php# Очередь обработки
+│   ├── ReportController.php    # Загрузка отчётов
+│   ├── TransferController.php  # История передач
+│   └── UserController.php      # Управление пользователями
+├── core/
+│   ├── App.php             # Роутер и запуск приложения
+│   ├── Auth.php            # Аутентификация и права
+│   ├── Autoloader.php      # Автозагрузка классов
+│   ├── Database.php        # Подключение к БД и миграции
+│   ├── Lang.php            # Интернационализация
+│   └── View.php            # Рендеринг шаблонов
+── data/                   # Данные (должен быть доступен на запись http)
+│   ├── inventory.db        # База данных SQLite
+│   ├── app_error.log       # Лог ошибок
+│   └── uploads/            # Загруженные JSON-отчёты
+── docs/                   # Документация
+│   ├── ru_user-guide.html
+│   ├── ru_admin-guide.html
+│   ├── en_user-guide.html
+│   └── en_admin-guide.html
+├── lang/
+│   ├── en.php              # Английские переводы
+│   └── ru.php              # Русские переводы
+├── public/                 # DOCUMENT_ROOT веб-сервера
+│   ├── .htaccess           # Правила mod_rewrite
+│   └── index.php           # Единая точка входа
+├── services/
+│   ├── JsonParser.php      # Парсинг JSON-отчётов
+│   └── Transliterator.php  # Транслитерация по ГОСТ
+└── views/
+    ├── auth/               # Шаблоны входа и смены пароля
+    ├── computers/          # Реестр и карточка ПК
+    ├── dashboard/          # Главная страница
+    ├── layouts/
+    │   └── main.php        # Общий layout с навбаром
+    ├── processing/         # Очередь обработки
+    ├── reports/            # Загрузка и список отчётов
+    ├── transfers/          # История передач
+    └── users/              # Управление пользователями
+        </div>
+    </div>
+
+    <div class="section" id="database">
+        <h2>6. База данных</h2>
+        <p>SQLite-файл <code>data/inventory.db</code> содержит 4 таблицы:</p>
+
+        <h3>Таблица <code>users</code></h3>
+        <table>
+            <tr><th>Поле</th><th>Тип</th><th>Описание</th></tr>
+            <tr><td>id</td><td>INTEGER</td><td>Первичный ключ</td></tr>
+            <tr><td>login</td><td>TEXT UNIQUE</td><td>Уникальный логин</td></tr>
+            <tr><td>password_hash</td><td>TEXT</td><td>Хеш пароля (bcrypt)</td></tr>
+            <tr><td>last_name, first_name, middle_name</td><td>TEXT</td><td>ФИО</td></tr>
+            <tr><td>role</td><td>TEXT</td><td>admin / editor / viewer / none</td></tr>
+            <tr><td>must_change_pwd</td><td>INTEGER</td><td>1 = нужно сменить пароль</td></tr>
+            <tr><td>created_at</td><td>TEXT</td><td>Дата создания</td></tr>
+        </table>
+
+        <h3>Таблица <code>computers</code></h3>
+        <table>
+            <tr><th>Поле</th><th>Тип</th><th>Описание</th></tr>
+            <tr><td>id</td><td>INTEGER</td><td>Первичный ключ</td></tr>
+            <tr><td>serial_number</td><td>TEXT</td><td>Серийный номер (или NULL)</td></tr>
+            <tr><td>composite_key</td><td>TEXT UNIQUE</td><td>Хеш для ПК без серийника</td></tr>
+            <tr><td>manufacturer, model</td><td>TEXT</td><td>Производитель и модель</td></tr>
+            <tr><td>motherboard, cpu_name, ram_total_gb</td><td>TEXT/REAL</td><td>Основные характеристики</td></tr>
+            <tr><td>storage_info, ram_details</td><td>TEXT</td><td>Детали накопителей и RAM</td></tr>
+            <tr><td>os_caption, os_build</td><td>TEXT</td><td>Операционная система</td></tr>
+            <tr><td>ip_address, computer_name</td><td>TEXT</td><td>Сетевые данные</td></tr>
+            <tr><td>reported_by</td><td>TEXT</td><td>ФИО из отчёта</td></tr>
+            <tr><td>current_user_id</td><td>INTEGER FK</td><td>Ссылка на владельца</td></tr>
+            <tr><td>comment</td><td>TEXT</td><td>Комментарий администратора</td></tr>
+            <tr><td>is_processed</td><td>INTEGER</td><td>0 = в очереди, 1 = обработан</td></tr>
+        </table>
+
+        <h3>Таблица <code>transfers</code></h3>
+        <p>Журнал всех перемещений оборудования. Хранит историю: от кого, кому, кем и когда передан каждый ПК.</p>
+
+        <h3>Таблица <code>processed_uploads</code></h3>
+        <p>Реестр загруженных JSON-файлов с хешами для защиты от дубликатов.</p>
+
+        <div class="tip">
+            <strong>✅ Миграции:</strong> При обновлении версии класс <code>Database</code> автоматически добавляет недостающие поля через ALTER TABLE.
+        </div>
+    </div>
+
+    <div class="section" id="permissions">
+        <h2>7. Настройка прав доступа</h2>
+        
+        <h3>Принцип:</h3>
+        <ul>
+            <li><strong>Пользователь Synology (zaikoz)</strong> — владелец проекта, может делать <code>git pull</code></li>
+            <li><strong>Пользователь http</strong> — веб-сервер, должен иметь запись в <code>data/</code></li>
+            <li><strong>Группа administrators</strong> — для совместного доступа</li>
+        </ul>
+
+        <h3>Таблица прав:</h3>
+        <table>
+            <tr><th>Путь</th><th>Владелец</th><th>Права</th><th>Причина</th></tr>
+            <tr>
+                <td>Весь проект</td>
+                <td>zaikoz:administrators</td>
+                <td>755 (папки), 644 (файлы)</td>
+                <td>Git pull, редактирование</td>
+            </tr>
+            <tr>
+                <td>data/</td>
+                <td>http:http</td>
+                <td>775</td>
+                <td>Запись БД, логов, загрузок</td>
+            </tr>
+            <tr>
+                <td>data/inventory.db</td>
+                <td>http:http</td>
+                <td>664</td>
+                <td>Запись в БД</td>
+            </tr>
+            <tr>
+                <td>data/uploads/</td>
+                <td>http:http</td>
+                <td>775</td>
+                <td>Загрузка JSON-файлов</td>
+            </tr>
+        </table>
+
+        <div class="warning">
+            <strong>⚠️ После каждого git pull</strong> права могут сбиваться. Всегда запускайте <code>./admin-scripts/fix-permissions.sh</code> после обновления.
+        </div>
+    </div>
+
+    <div class="section" id="roles">
+        <h2>8. Роли и права пользователей</h2>
+        <table>
+            <tr><th>Роль</th><th>Доступ</th></tr>
+            <tr>
+                <td><strong>admin</strong></td>
+                <td>Полный доступ: всё, включая управление пользователями</td>
+            </tr>
+            <tr>
+                <td><strong>editor</strong></td>
+                <td>Загрузка отчётов, обработка, передача ПК, просмотр всего</td>
+            </tr>
+            <tr>
+                <td><strong>viewer</strong></td>
+                <td>Только просмотр данных (без изменений)</td>
+            </tr>
+            <tr>
+                <td><strong>none</strong></td>
+                <td>Нет доступа (заблокирован) или виртуальный пользователь (склад)</td>
+            </tr>
+        </table>
+
+        <div class="note">
+            <strong>💡 Виртуальный пользователь warehouse:</strong> имеет роль <code>none</code>, используется как "владелец" для компьютеров на складе. Не может входить в систему.
+        </div>
+    </div>
+
+    <div class="section" id="config">
+        <h2>9. Конфигурация</h2>
+        <p>Основные настройки находятся в <code>config/config.php</code>:</p>
+        <pre><code>&lt;?php
+define('ROOT_PATH', dirname(__DIR__));
+define('DATA_PATH', ROOT_PATH . '/data');
+define('DB_FILE', DATA_PATH . '/inventory.db');
+define('WAREHOUSE_LOGIN', 'warehouse');
+define('APP_VERSION', '1.0.0');</code></pre>
+
+        <h3>Ключевые константы:</h3>
+        <ul>
+            <li><code>ROOT_PATH</code> — корень проекта</li>
+            <li><code>DATA_PATH</code> — папка для данных</li>
+            <li><code>DB_FILE</code> — путь к файлу БД</li>
+            <li><code>WAREHOUSE_LOGIN</code> — логин виртуального склада</li>
+        </ul>
+    </div>
+
+    <div class="section" id="logs">
+        <h2>10. Логирование</h2>
+        <p>Приложение ведёт лог ошибок в файле <code>data/app_error.log</code>.</p>
+
+        <h3>Что логируется:</h3>
+        <ul>
+            <li>PHP-ошибки и исключения</li>
+            <li>Ошибки при загрузке отчётов</li>
+            <li>Ошибки при передаче компьютеров</li>
+        </ul>
+
+        <h3>Просмотр логов:</h3>
+        <pre><code>tail -f /volume1/web/inventory-web/data/app_error.log</code></pre>
+
+        <div class="tip">
+            <strong>✅ Совет:</strong> Настройте ротацию логов, чтобы файл не разрастался. Например, через cron:
+            <pre><code>0 0 * * 0 mv /volume1/web/inventory-web/data/app_error.log /volume1/web/inventory-web/data/app_error.log.$(date +\%Y\%m\%d)</code></pre>
+        </div>
+    </div>
+
+    <div class="section" id="backup">
+        <h2>11. Резервное копирование</h2>
+        <p>Для полного бэкапа достаточно скопировать папку <code>data/</code>:</p>
+        <pre><code># Создание бэкапа
+tar -czf inventory-backup-$(date +%Y%m%d).tar.gz \
+    /volume1/web/inventory-web/data/
+
+# Восстановление
+tar -xzf inventory-backup-YYYYMMDD.tar.gz -C /</code></pre>
+
+        <h3>Что входит в бэкап:</h3>
+        <ul>
+            <li><code>inventory.db</code> — вся база данных</li>
+            <li><code>uploads/</code> — все загруженные JSON-отчёты</li>
+            <li><code>app_error.log</code> — логи (опционально)</li>
+        </ul>
+
+        <div class="warning">
+            <strong>⚠️ Важно:</strong> Сам код приложения хранится в Git и может быть восстановлен из репозитория. Бэкапить нужно только <code>data/</code>.
+        </div>
+    </div>
+
+    <div class="section" id="update">
+        <h2>12. Обновление системы</h2>
+        
+        <h3>Стандартная процедура:</h3>
+        <pre><code>cd /volume1/web/inventory-web
+git stash              # Сохранить локальные изменения (если есть)
+git pull               # Получить обновления из репозитория
+./admin-scripts/fix-permissions.sh   # Восстановить права</code></pre>
+
+        <h3>Если были локальные правки:</h3>
+        <pre><code>git stash pop          # Вернуть локальные изменения</code></pre>
+
+        <div class="note">
+            <strong>💡 Миграции БД:</strong> При обновлении новые поля в таблицах создаются автоматически через метод <code>Database::migrate()</code>. Никаких ручных действий не требуется.
+        </div>
+    </div>
+
+    <div class="section" id="troubleshooting">
+        <h2>13. Решение проблем</h2>
+
+        <h3>Ошибка 500 (Internal Server Error)</h3>
+        <p><strong>Причина:</strong> PHP-ошибка. Проверьте лог:</p>
+        <pre><code>cat /volume1/web/inventory-web/data/app_error.log</code></pre>
+        <p><strong>Частые причины:</strong></p>
+        <ul>
+            <li>Отсутствует файл (например, <code>Lang.php</code>) — проверьте <code>git status</code></li>
+            <li>Дубликат метода в классе — проверьте синтаксис через <code>php -l файл.php</code></li>
+            <li>Нет прав на запись в <code>data/</code> — запустите <code>./admin-scripts/fix-permissions.sh</code></li>
+        </ul>
+
+        <h3>Ошибка 404 на новых страницах</h3>
+        <p><strong>Причина:</strong> не добавлен маршрут в <code>config/routes.php</code> или отсутствует контроллер.</p>
+        <p><strong>Решение:</strong> проверьте наличие файла контроллера и строки в роутах.</p>
+
+        <h3>Не загружаются JSON-файлы</h3>
+        <p><strong>Причины:</strong></p>
+        <ul>
+            <li>Нет прав на запись в <code>data/uploads/</code> — исправьте права</li>
+            <li>Файл содержит BOM — парсер автоматически удаляет BOM, но если ошибка остаётся, проверьте <code>app_error.log</code></li>
+            <li>Файл уже загружен — это нормальная защита от дубликатов</li>
+        </ul>
+
+        <h3>Не работает mod_rewrite</h3>
+        <p><strong>Симптомы:</strong> все URL кроме <code>/</code> возвращают 404.</p>
+        <p><strong>Решение:</strong></p>
+        <ol>
+            <li>Убедитесь, что <code>mod_rewrite</code> включён в Apache</li>
+            <li>Проверьте наличие <code>.htaccess</code> в <code>public/</code></li>
+            <li>В настройках виртуального хоста разрешите <code>AllowOverride All</code></li>
+        </ol>
+
+        <h3>Сброс базы данных (для тестирования)</h3>
+        <p>Используйте скрипт <code>admin-scripts/reset-inventory.sh</code>:</p>
+        <pre><code>cd /volume1/web/inventory-web
+./admin-scripts/reset-inventory.sh</code></pre>
+
+        <div class="danger">
+            <strong> Осторожно:</strong> это удалит все компьютеры, отчёты и передачи. Пользователи останутся.
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>Inventory Web — Руководство администратора</p>
+    <p>Разработано <a href="https://github.com/vpupkin123" target="_blank">vpupkin123</a></p>
+    <p>Исходный код: <a href="https://github.com/vpupkin123/inventory-web" target="_blank">github.com/vpupkin123/inventory-web</a></p>
+</div>
+
+</body>
+</html>

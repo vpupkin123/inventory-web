@@ -6,8 +6,8 @@
     <title>Inventory Web</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f5f5f5; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; min-height: 100vh; display: flex; flex-direction: column; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; flex: 1; }
         .navbar { 
             background: #333; 
             color: white; 
@@ -47,6 +47,17 @@
         .alert { padding: 10px; margin-bottom: 15px; border-radius: 3px; }
         .alert-danger { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
         .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        footer { 
+            text-align: center; 
+            padding: 20px; 
+            margin-top: 40px; 
+            border-top: 1px solid #ddd; 
+            color: #666; 
+            font-size: 0.9em;
+            background: #f9f9f9;
+        }
+        footer a { color: #007bff; text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -61,7 +72,6 @@
             <a href="/users"><?= Lang::t('nav.users') ?></a>
         </div>
         <div class="right">
-            <!-- Language switcher -->
             <form method="POST" action="/lang" style="display: inline;">
                 <div class="lang-switcher">
                     <select name="locale" onchange="this.form.submit()">
@@ -85,5 +95,14 @@
     <div class="container">
         <?= $content ?>
     </div>
+    
+    <footer>
+        <p>
+            <?= Lang::t('footer.developed_by') ?> 
+            <a href="https://github.com/vpupkin123" target="_blank">vpupkin123</a>
+            | <?= Lang::t('footer.source_code') ?> 
+            <a href="https://github.com/vpupkin123/inventory-web" target="_blank">GitHub</a>
+        </p>
+    </footer>
 </body>
 </html>

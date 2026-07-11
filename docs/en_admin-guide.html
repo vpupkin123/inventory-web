@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Web — Administrator Guide</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; line-height: 1.7; color: #333; background: #f5f7fa; }
+        .header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 40px 20px; text-align: center; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.2em; opacity: 0.9; }
+        .container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
+        .toc { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .toc h2 { margin-bottom: 15px; color: #11998e; }
+        .toc ol { margin-left: 25px; }
+        .toc li { margin: 8px 0; }
+        .toc a { color: #11998e; text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .section { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        h2 { color: #11998e; border-bottom: 2px solid #11998e; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.8em; }
+        h3 { color: #0d7a6f; margin: 20px 0 10px 0; font-size: 1.3em; }
+        h4 { color: #333; margin: 15px 0 8px 0; font-size: 1.1em; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 25px; margin-bottom: 15px; }
+        li { margin-bottom: 6px; }
+        .note { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .danger { background: #f8d7da; border-left: 4px solid #dc3545; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .tip { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: "Consolas", "Courier New", monospace; color: #d63384; font-size: 0.95em; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; margin: 15px 0; font-family: "Consolas", "Courier New", monospace; font-size: 0.9em; line-height: 1.5; }
+        pre code { background: transparent; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background: #11998e; color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .folder-tree { background: #f8f9fa; padding: 15px; border-radius: 5px; font-family: "Consolas", monospace; font-size: 0.9em; line-height: 1.6; border-left: 3px solid #11998e; }
+        .footer { text-align: center; padding: 30px; color: #666; font-size: 0.9em; }
+        .footer a { color: #11998e; text-decoration: none; }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 0.85em; font-weight: bold; margin-right: 5px; }
+        .badge-php { background: #777bb4; color: white; }
+        .badge-sqlite { background: #00825d; color: white; }
+        .badge-html { background: #e34c26; color: white; }
+        .badge-js { background: #f7df1e; color: black; }
+        @media print { .header { background: #11998e !important; } .section { box-shadow: none; border: 1px solid #ddd; } pre { background: #f4f4f4; color: #333; border: 1px solid #ddd; } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>🛠️ Inventory Web</h1>
+    <p>Administrator Guide</p>
+</div>
+
+<div class="container">
+
+    <div class="toc">
+        <h2>📑 Table of Contents</h2>
+        <ol>
+            <li><a href="#overview">System Overview</a></li>
+            <li><a href="#stack">Technology Stack</a></li>
+            <li><a href="#requirements">System Requirements</a></li>
+            <li><a href="#installation">Installation on Synology</a></li>
+            <li><a href="#structure">Project Structure</a></li>
+            <li><a href="#database">Database</a></li>
+            <li><a href="#permissions">Access Permissions Setup</a></li>
+            <li><a href="#roles">User Roles and Permissions</a></li>
+            <li><a href="#config">Configuration</a></li>
+            <li><a href="#logs">Logging</a></li>
+            <li><a href="#backup">Backup</a></li>
+            <li><a href="#update">System Update</a></li>
+            <li><a href="#troubleshooting">Troubleshooting</a></li>
+        </ol>
+    </div>
+
+    <div class="section" id="overview">
+        <h2>1. System Overview</h2>
+        <p><strong>Inventory Web</strong> is a lightweight web application for tracking computer equipment, specifically designed to run on Synology NAS without external dependencies.</p>
+
+        <h3>Key Features:</h3>
+        <ul>
+            <li><strong>Minimalism:</strong> no frameworks, no Composer, no heavy dependencies</li>
+            <li><strong>Autonomy:</strong> everything needed is built-in — PHP + SQLite</li>
+            <li><strong>Multi-language:</strong> Russian and English interfaces</li>
+            <li><strong>Security:</strong> password hashing, SQL injection protection, mandatory password change on first login</li>
+            <li><strong>Compatibility:</strong> correct handling of files from Windows (BOM processing, Cyrillic support)</li>
+            <li><strong>Automation:</strong> auto-generation of logins according to GOST R 7.0.34-2014</li>
+        </ul>
+    </div>
+
+    <div class="section" id="stack">
+        <h2>2. Technology Stack</h2>
+        
+        <h3>Server-side:</h3>
+        <ul>
+            <li><span class="badge badge-php">PHP 8.0+</span> — main language</li>
+            <li><span class="badge badge-sqlite">SQLite 3</span> — database (single <code>inventory.db</code> file)</li>
+            <li><span class="badge badge-html">HTML5</span> — markup</li>
+            <li><span class="badge badge-js">JavaScript</span> — interactivity (validation, AJAX)</li>
+            <li>CSS3 — styles (embedded, no frameworks)</li>
+        </ul>
+
+        <h3>Architecture:</h3>
+        <ul>
+            <li><strong>MVC-like structure</strong> — separation into controllers, views, and models</li>
+            <li><strong>Single entry point</strong> — <code>public/index.php</code> + <code>.htaccess</code> for clean URLs</li>
+            <li><strong>Custom router</strong> — <code>App</code> class handles routes</li>
+            <li><strong>Class autoloader</strong> — <code>Autoloader</code> for services and controllers</li>
+            <li><strong>Internationalization system</strong> — <code>Lang</code> class with translation files</li>
+        </ul>
+
+        <h3>External Dependencies:</h3>
+        <p><strong>None.</strong> No libraries, no Composer, no CDN — everything works autonomously.</p>
+    </div>
+
+    <div class="section" id="requirements">
+        <h2>3. System Requirements</h2>
+        
+        <h3>Minimum:</h3>
+        <table>
+            <tr>
+                <th>Component</th>
+                <th>Requirement</th>
+            </tr>
+            <tr>
+                <td>Operating System</td>
+                <td>Linux (tested on Synology DSM 7+)</td>
+            </tr>
+            <tr>
+                <td>Web Server</td>
+                <td>Apache 2.4+ with mod_rewrite or Nginx</td>
+            </tr>
+            <tr>
+                <td>PHP</td>
+                <td>8.0 or higher (with extensions: PDO, SQLite, JSON, mbstring)</td>
+            </tr>
+            <tr>
+                <td>SQLite</td>
+                <td>3.x (built into PHP)</td>
+            </tr>
+            <tr>
+                <td>Disk</td>
+                <td>~10 MB for the application + space for DB and uploads</td>
+            </tr>
+            <tr>
+                <td>Memory</td>
+                <td>~50 MB RAM</td>
+            </tr>
+        </table>
+
+        <div class="note">
+            <strong>💡 Tested on:</strong> Synology DS920+ with Web Station and PHP 8.0. Also works on any other Linux servers with a similar stack.
+        </div>
+    </div>
+
+    <div class="section" id="installation">
+        <h2>4. Installation on Synology</h2>
+
+        <h3>Step 1: Prepare Web Station</h3>
+        <ol>
+            <li>Install <strong>Web Station</strong> from Package Center</li>
+            <li>Install <strong>Apache 2.4</strong> and <strong>PHP 8.0</strong> (or higher)</li>
+            <li>Enable <code>mod_rewrite</code> module in Apache settings</li>
+        </ol>
+
+        <h3>Step 2: Clone Repository</h3>
+        <p>Connect to Synology via SSH and execute:</p>
+        <pre><code>cd /volume1/web
+git clone https://github.com/vpupkin123/inventory-web.git
+cd inventory-web</code></pre>
+
+        <h3>Step 3: Configure Virtual Host</h3>
+        <ol>
+            <li>Open <strong>Web Station → Web Portal</strong></li>
+            <li>Create a new virtual host:
+                <ul>
+                    <li>Server name: <code>inventory-web</code> (or your domain)</li>
+                    <li>Root folder: <code>/volume1/web/inventory-web/public</code></li>
+                    <li>PHP: <code>PHP 8.0</code></li>
+                    <li>HTTP Server: <code>Apache 2.4</code></li>
+                </ul>
+            </li>
+            <li>In DNS settings or <code>/etc/hosts</code>, configure the server name</li>
+        </ol>
+
+        <h3>Step 4: Configure Access Permissions</h3>
+        <p>The <code>admin-scripts/</code> folder contains a universal script <code>fix-permissions.sh</code> for setting permissions.</p>
+        
+        <p>Make it executable and run:</p>
+        <pre><code>chmod +x /volume1/web/inventory-web/admin-scripts/fix-permissions.sh
+cd /volume1/web/inventory-web
+./admin-scripts/fix-permissions.sh</code></pre>
+
+        <div class="note">
+            <strong>💡 Universal:</strong> The script automatically detects the current user and group. If needed, you can pass parameters:
+            <pre><code>./admin-scripts/fix-permissions.sh /path/to/project owner group webuser</code></pre>
+        </div>
+
+        <h3>Step 5: First Initialization</h3>
+        <p>On first access to the site, automatically:</p>
+        <ul>
+            <li>Database <code>data/inventory.db</code> is created</li>
+            <li>Virtual user <code>warehouse</code> is created</li>
+            <li>Administrator is created: login <code>admin</code>, password <code>password</code></li>
+        </ul>
+
+        <div class="danger">
+            <strong>🚨 MANDATORY:</strong> Immediately after first login, change the administrator password!
+        </div>
+    </div>
+
+    <div class="section" id="structure">
+        <h2>5. Project Structure</h2>
+        <div class="folder-tree">
+inventory-web/
+├── admin-scripts/
+│   ├── fix-permissions.sh      # Universal permissions script
+│   └── reset-inventory.sh      # Test data reset
+├── config/
+│   ├── config.php          # Constants and settings
+│   └── routes.php          # Application routes
+├── controllers/
+│   ├── ApiController.php       # AJAX endpoints
+│   ├── AuthController.php      # Authentication
+│   ├── ComputerController.php  # Computer registry
+│   ├── DashboardController.php # Dashboard
+│   ├── LangController.php      # Language switching
+│   ├── ProcessingController.php# Processing queue
+│   ├── ReportController.php    # Report uploads
+│   ├── TransferController.php  # Transfer history
+│   └── UserController.php      # User management
+├── core/
+│   ├── App.php             # Router and application startup
+│   ├── Auth.php            # Authentication and permissions
+│   ├── Autoloader.php      # Class autoloading
+│   ├── Database.php        # DB connection and migrations
+│   ├── Lang.php            # Internationalization
+│   └── View.php            # Template rendering
+├── data/                   # Data (must be writable by http)
+│   ├── inventory.db        # SQLite database
+│   ├── app_error.log       # Error log
+│   └── uploads/            # Uploaded JSON reports
+├── docs/                   # Documentation
+│   ├── ru_user-guide.html
+│   ├── ru_admin-guide.html
+│   ├── en_user-guide.html
+│   └── en_admin-guide.html
+├── lang/
+│   ├── en.php              # English translations
+│   ── ru.php              # Russian translations
+├── public/                 # Web server DOCUMENT_ROOT
+│   ├── .htaccess           # mod_rewrite rules
+│   ── index.php           # Single entry point
+├── services/
+│   ├── JsonParser.php      # JSON report parsing
+│   └── Transliterator.php  # GOST transliteration
+└── views/
+    ├── auth/               # Login and password change templates
+    ├── computers/          # Registry and computer card
+    ├── dashboard/          # Dashboard
+    ├── layouts/
+    │   └── main.php        # Common layout with navbar
+    ├── processing/         # Processing queue
+    ├── reports/            # Report upload and list
+    ├── transfers/          # Transfer history
+    ── users/              # User management
+        </div>
+    </div>
+
+    <div class="section" id="database">
+        <h2>6. Database</h2>
+        <p>SQLite file <code>data/inventory.db</code> contains 4 tables:</p>
+
+        <h3>Table <code>users</code></h3>
+        <table>
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            <tr><td>id</td><td>INTEGER</td><td>Primary key</td></tr>
+            <tr><td>login</td><td>TEXT UNIQUE</td><td>Unique login</td></tr>
+            <tr><td>password_hash</td><td>TEXT</td><td>Password hash (bcrypt)</td></tr>
+            <tr><td>last_name, first_name, middle_name</td><td>TEXT</td><td>Full name</td></tr>
+            <tr><td>role</td><td>TEXT</td><td>admin / editor / viewer / none</td></tr>
+            <tr><td>must_change_pwd</td><td>INTEGER</td><td>1 = must change password</td></tr>
+            <tr><td>created_at</td><td>TEXT</td><td>Creation date</td></tr>
+        </table>
+
+        <h3>Table <code>computers</code></h3>
+        <table>
+            <tr><th>Field</th><th>Type</th><th>Description</th></tr>
+            <tr><td>id</td><td>INTEGER</td><td>Primary key</td></tr>
+            <tr><td>serial_number</td><td>TEXT</td><td>Serial number (or NULL)</td></tr>
+            <tr><td>composite_key</td><td>TEXT UNIQUE</td><td>Hash for PCs without serial</td></tr>
+            <tr><td>manufacturer, model</td><td>TEXT</td><td>Manufacturer and model</td></tr>
+            <tr><td>motherboard, cpu_name, ram_total_gb</td><td>TEXT/REAL</td><td>Main specifications</td></tr>
+            <tr><td>storage_info, ram_details</td><td>TEXT</td><td>Storage and RAM details</td></tr>
+            <tr><td>os_caption, os_build</td><td>TEXT</td><td>Operating system</td></tr>
+            <tr><td>ip_address, computer_name</td><td>TEXT</td><td>Network data</td></tr>
+            <tr><td>reported_by</td><td>TEXT</td><td>Full name from report</td></tr>
+            <tr><td>current_user_id</td><td>INTEGER FK</td><td>Reference to owner</td></tr>
+            <tr><td>comment</td><td>TEXT</td><td>Administrator comment</td></tr>
+            <tr><td>is_processed</td><td>INTEGER</td><td>0 = in queue, 1 = processed</td></tr>
+        </table>
+
+        <h3>Table <code>transfers</code></h3>
+        <p>Log of all equipment movements. Stores history: from whom, to whom, by whom, and when each PC was transferred.</p>
+
+        <h3>Table <code>processed_uploads</code></h3>
+        <p>Registry of uploaded JSON files with hashes for duplicate protection.</p>
+
+        <div class="tip">
+            <strong>✅ Migrations:</strong> When updating the version, the <code>Database</code> class automatically adds missing fields via ALTER TABLE.
+        </div>
+    </div>
+
+    <div class="section" id="permissions">
+        <h2>7. Access Permissions Setup</h2>
+        
+        <h3>Principle:</h3>
+        <ul>
+            <li><strong>Synology user (zaikoz)</strong> — project owner, can do <code>git pull</code></li>
+            <li><strong>User http</strong> — web server, must have write access to <code>data/</code></li>
+            <li><strong>Group administrators</strong> — for shared access</li>
+        </ul>
+
+        <h3>Permissions Table:</h3>
+        <table>
+            <tr><th>Path</th><th>Owner</th><th>Permissions</th><th>Reason</th></tr>
+            <tr>
+                <td>Entire project</td>
+                <td>zaikoz:administrators</td>
+                <td>755 (folders), 644 (files)</td>
+                <td>Git pull, editing</td>
+            </tr>
+            <tr>
+                <td>data/</td>
+                <td>http:http</td>
+                <td>775</td>
+                <td>Write DB, logs, uploads</td>
+            </tr>
+            <tr>
+                <td>data/inventory.db</td>
+                <td>http:http</td>
+                <td>664</td>
+                <td>Write to DB</td>
+            </tr>
+            <tr>
+                <td>data/uploads/</td>
+                <td>http:http</td>
+                <td>775</td>
+                <td>Upload JSON files</td>
+            </tr>
+        </table>
+
+        <div class="warning">
+            <strong>⚠️ After each git pull</strong> permissions may reset. Always run <code>./admin-scripts/fix-permissions.sh</code> after updating.
+        </div>
+    </div>
+
+    <div class="section" id="roles">
+        <h2>8. User Roles and Permissions</h2>
+        <table>
+            <tr><th>Role</th><th>Access</th></tr>
+            <tr>
+                <td><strong>admin</strong></td>
+                <td>Full access: everything, including user management</td>
+            </tr>
+            <tr>
+                <td><strong>editor</strong></td>
+                <td>Upload reports, processing, computer transfers, view all</td>
+            </tr>
+            <tr>
+                <td><strong>viewer</strong></td>
+                <td>View-only access (no changes)</td>
+            </tr>
+            <tr>
+                <td><strong>none</strong></td>
+                <td>No access (blocked) or virtual user (warehouse)</td>
+            </tr>
+        </table>
+
+        <div class="note">
+            <strong>💡 Virtual user warehouse:</strong> has role <code>none</code>, used as "owner" for computers on the warehouse. Cannot log into the system.
+        </div>
+    </div>
+
+    <div class="section" id="config">
+        <h2>9. Configuration</h2>
+        <p>Main settings are in <code>config/config.php</code>:</p>
+        <pre><code>&lt;?php
+define('ROOT_PATH', dirname(__DIR__));
+define('DATA_PATH', ROOT_PATH . '/data');
+define('DB_FILE', DATA_PATH . '/inventory.db');
+define('WAREHOUSE_LOGIN', 'warehouse');
+define('APP_VERSION', '1.0.0');</code></pre>
+
+        <h3>Key Constants:</h3>
+        <ul>
+            <li><code>ROOT_PATH</code> — project root</li>
+            <li><code>DATA_PATH</code> — data folder</li>
+            <li><code>DB_FILE</code> — path to DB file</li>
+            <li><code>WAREHOUSE_LOGIN</code> — virtual warehouse login</li>
+        </ul>
+    </div>
+
+    <div class="section" id="logs">
+        <h2>10. Logging</h2>
+        <p>The application maintains an error log in <code>data/app_error.log</code>.</p>
+
+        <h3>What is logged:</h3>
+        <ul>
+            <li>PHP errors and exceptions</li>
+            <li>Errors during report uploads</li>
+            <li>Errors during computer transfers</li>
+        </ul>
+
+        <h3>View logs:</h3>
+        <pre><code>tail -f /volume1/web/inventory-web/data/app_error.log</code></pre>
+
+        <div class="tip">
+            <strong>✅ Tip:</strong> Set up log rotation to prevent the file from growing. For example, via cron:
+            <pre><code>0 0 * * 0 mv /volume1/web/inventory-web/data/app_error.log /volume1/web/inventory-web/data/app_error.log.$(date +\%Y\%m\%d)</code></pre>
+        </div>
+    </div>
+
+    <div class="section" id="backup">
+        <h2>11. Backup</h2>
+        <p>For a complete backup, it's sufficient to copy the <code>data/</code> folder:</p>
+        <pre><code># Create backup
+tar -czf inventory-backup-$(date +%Y%m%d).tar.gz \
+    /volume1/web/inventory-web/data/
+
+# Restore
+tar -xzf inventory-backup-YYYYMMDD.tar.gz -C /</code></pre>
+
+        <h3>What's included in the backup:</h3>
+        <ul>
+            <li><code>inventory.db</code> — entire database</li>
+            <li><code>uploads/</code> — all uploaded JSON reports</li>
+            <li><code>app_error.log</code> — logs (optional)</li>
+        </ul>
+
+        <div class="warning">
+            <strong>️ Important:</strong> The application code itself is stored in Git and can be restored from the repository. Only <code>data/</code> needs to be backed up.
+        </div>
+    </div>
+
+    <div class="section" id="update">
+        <h2>12. System Update</h2>
+        
+        <h3>Standard procedure:</h3>
+        <pre><code>cd /volume1/web/inventory-web
+git stash              # Save local changes (if any)
+git pull               # Get updates from repository
+./admin-scripts/fix-permissions.sh   # Restore permissions</code></pre>
+
+        <h3>If there were local changes:</h3>
+        <pre><code>git stash pop          # Restore local changes</code></pre>
+
+        <div class="note">
+            <strong>💡 DB Migrations:</strong> When updating, new fields in tables are created automatically via the <code>Database::migrate()</code> method. No manual actions required.
+        </div>
+    </div>
+
+    <div class="section" id="troubleshooting">
+        <h2>13. Troubleshooting</h2>
+
+        <h3>Error 500 (Internal Server Error)</h3>
+        <p><strong>Cause:</strong> PHP error. Check the log:</p>
+        <pre><code>cat /volume1/web/inventory-web/data/app_error.log</code></pre>
+        <p><strong>Common causes:</strong></p>
+        <ul>
+            <li>Missing file (e.g., <code>Lang.php</code>) — check <code>git status</code></li>
+            <li>Duplicate method in class — check syntax via <code>php -l file.php</code></li>
+            <li>No write permissions to <code>data/</code> — run <code>./admin-scripts/fix-permissions.sh</code></li>
+        </ul>
+
+        <h3>Error 404 on new pages</h3>
+        <p><strong>Cause:</strong> route not added in <code>config/routes.php</code> or controller missing.</p>
+        <p><strong>Solution:</strong> check for controller file existence and route line.</p>
+
+        <h3>JSON files not uploading</h3>
+        <p><strong>Causes:</strong></p>
+        <ul>
+            <li>No write permissions to <code>data/uploads/</code> — fix permissions</li>
+            <li>File contains BOM — parser automatically removes BOM, but if error persists, check <code>app_error.log</code></li>
+            <li>File already uploaded — this is normal duplicate protection</li>
+        </ul>
+
+        <h3>mod_rewrite not working</h3>
+        <p><strong>Symptoms:</strong> all URLs except <code>/</code> return 404.</p>
+        <p><strong>Solution:</strong></p>
+        <ol>
+            <li>Ensure <code>mod_rewrite</code> is enabled in Apache</li>
+            <li>Check for <code>.htaccess</code> in <code>public/</code></li>
+            <li>In virtual host settings, allow <code>AllowOverride All</code></li>
+        </ol>
+
+        <h3>Reset database (for testing)</h3>
+        <p>Use script <code>admin-scripts/reset-inventory.sh</code>:</p>
+        <pre><code>cd /volume1/web/inventory-web
+./admin-scripts/reset-inventory.sh</code></pre>
+
+        <div class="danger">
+            <strong>🚨 Caution:</strong> this will delete all computers, reports, and transfers. Users will remain.
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>Inventory Web — Administrator Guide</p>
+    <p>Developed by <a href="https://github.com/vpupkin123" target="_blank">vpupkin123</a></p>
+    <p>Source code: <a href="https://github.com/vpupkin123/inventory-web" target="_blank">github.com/vpupkin123/inventory-web</a></p>
+</div>
+
+</body>
+</html>

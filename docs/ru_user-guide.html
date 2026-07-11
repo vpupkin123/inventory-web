@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Web — Руководство пользователя</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; line-height: 1.7; color: #333; background: #f5f7fa; }
+        .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 40px 20px; text-align: center; }
+        .header h1 { font-size: 2.5em; margin-bottom: 10px; }
+        .header p { font-size: 1.2em; opacity: 0.9; }
+        .container { max-width: 900px; margin: 0 auto; padding: 30px 20px; }
+        .toc { background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 30px; }
+        .toc h2 { margin-bottom: 15px; color: #667eea; }
+        .toc ol { margin-left: 25px; }
+        .toc li { margin: 8px 0; }
+        .toc a { color: #667eea; text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        .section { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); margin-bottom: 25px; }
+        h2 { color: #667eea; border-bottom: 2px solid #667eea; padding-bottom: 10px; margin-bottom: 20px; font-size: 1.8em; }
+        h3 { color: #764ba2; margin: 20px 0 10px 0; font-size: 1.3em; }
+        p { margin-bottom: 12px; }
+        ul, ol { margin-left: 25px; margin-bottom: 15px; }
+        li { margin-bottom: 6px; }
+        .note { background: #e3f2fd; border-left: 4px solid #2196f3; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        .tip { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 15px; margin: 15px 0; border-radius: 4px; }
+        code { background: #f4f4f4; padding: 2px 6px; border-radius: 3px; font-family: "Consolas", monospace; color: #d63384; }
+        pre { background: #2d2d2d; color: #f8f8f2; padding: 15px; border-radius: 5px; overflow-x: auto; margin: 15px 0; font-family: "Consolas", monospace; font-size: 0.9em; line-height: 1.5; }
+        pre code { background: transparent; color: inherit; padding: 0; }
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        th, td { padding: 10px; border: 1px solid #ddd; text-align: left; }
+        th { background: #667eea; color: white; }
+        tr:nth-child(even) { background: #f9f9f9; }
+        .step { background: #f8f9fa; padding: 15px; border-left: 3px solid #667eea; margin: 15px 0; }
+        .step-number { display: inline-block; background: #667eea; color: white; width: 30px; height: 30px; line-height: 30px; text-align: center; border-radius: 50%; margin-right: 10px; font-weight: bold; }
+        .footer { text-align: center; padding: 30px; color: #666; font-size: 0.9em; }
+        .footer a { color: #667eea; text-decoration: none; }
+        @media print { .header { background: #667eea !important; } .section { box-shadow: none; border: 1px solid #ddd; } }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>📋 Inventory Web</h1>
+    <p>Руководство пользователя</p>
+</div>
+
+<div class="container">
+
+    <div class="toc">
+        <h2>📑 Содержание</h2>
+        <ol>
+            <li><a href="#intro">Введение</a></li>
+            <li><a href="#login">Вход в систему</a></li>
+            <li><a href="#password">Смена пароля</a></li>
+            <li><a href="#language">Переключение языка</a></li>
+            <li><a href="#dashboard">Главная страница</a></li>
+            <li><a href="#reports">Загрузка отчетов</a></li>
+            <li><a href="#processing">Очередь обработки</a></li>
+            <li><a href="#computers">Реестр компьютеров</a></li>
+            <li><a href="#computer-card">Карточка компьютера</a></li>
+            <li><a href="#transfer">Передача компьютера</a></li>
+            <li><a href="#history">История передач</a></li>
+            <li><a href="#users">Управление пользователями</a></li>
+            <li><a href="#scripts">Административные скрипты</a></li>
+            <li><a href="#export">Экспорт в Excel</a></li>
+        </ol>
+    </div>
+
+    <div class="section" id="intro">
+        <h2>1. Введение</h2>
+        <p><strong>Inventory Web</strong> — это веб-приложение для учёта компьютерного оборудования в организации. Система позволяет:</p>
+        <ul>
+            <li>Загружать данные о компьютерах из JSON-отчётов, собранных на клиентских машинах</li>
+            <li>Автоматически создавать учётные записи сотрудников</li>
+            <li>Закреплять компьютеры за конкретными пользователями или хранить их на виртуальном складе</li>
+            <li>Вести историю всех перемещений оборудования</li>
+            <li>Экспортировать данные в Excel для отчётности</li>
+        </ul>
+        <div class="note">
+            <strong> Примечание:</strong> Приложение поддерживает два языка интерфейса — русский и английский. Переключение доступно в любой момент через меню в правом верхнем углу.
+        </div>
+    </div>
+
+    <div class="section" id="login">
+        <h2>2. Вход в систему</h2>
+        <div class="step">
+            <span class="step-number">1</span> Откройте в браузере адрес системы (например, <code>http://inventory-web/</code>)
+        </div>
+        <div class="step">
+            <span class="step-number">2</span> Введите ваш логин и пароль
+        </div>
+        <div class="step">
+            <span class="step-number">3</span> Нажмите кнопку <strong>"Войти"</strong>
+        </div>
+        <div class="warning">
+            <strong>️ Важно:</strong> При первом входе система попросит вас сменить временный пароль. Это обязательный шаг для обеспечения безопасности.
+        </div>
+    </div>
+
+    <div class="section" id="password">
+        <h2>3. Смена пароля</h2>
+        <p>Если система перенаправила вас на страницу смены пароля:</p>
+        <div class="step">
+            <span class="step-number">1</span> Введите новый пароль (минимум 6 символов)
+        </div>
+        <div class="step">
+            <span class="step-number">2</span> Повторите пароль для подтверждения
+        </div>
+        <div class="step">
+            <span class="step-number">3</span> Нажмите <strong>"Сменить пароль"</strong>
+        </div>
+        <div class="tip">
+            <strong>✅ Совет:</strong> Используйте надёжный пароль, содержащий буквы разного регистра, цифры и специальные символы.
+        </div>
+    </div>
+
+    <div class="section" id="language">
+        <h2>4. Переключение языка</h2>
+        <p>В правом верхнем углу навигационной панели находится выпадающий список с флагами:</p>
+        <ul>
+            <li>🇬🇧 <strong>EN</strong> — английский язык</li>
+            <li>🇷🇺 <strong>RU</strong> — русский язык</li>
+        </ul>
+        <p>Выбранный язык сохраняется для вашей учётной записи и будет использоваться при следующих входах.</p>
+    </div>
+
+    <div class="section" id="dashboard">
+        <h2>5. Главная страница (Dashboard)</h2>
+        <p>После входа вы попадаете на главную страницу, которая содержит:</p>
+        
+        <h3>📊 Статистика</h3>
+        <ul>
+            <li><strong>Всего компьютеров</strong> — общее количество ПК в базе</li>
+            <li><strong>Назначено</strong> — компьютеры, закреплённые за сотрудниками</li>
+            <li><strong>На складе</strong> — свободные компьютеры, ожидающие назначения</li>
+            <li><strong>Не обработано</strong> — новые отчёты, требующие обработки</li>
+            <li><strong>Пользователей</strong> — количество учётных записей в системе</li>
+        </ul>
+
+        <h3>⚡ Быстрые действия</h3>
+        <p>Кнопки для самых частых операций:</p>
+        <ul>
+            <li><strong>Обработать очередь</strong> — перейти к обработке новых отчётов (появляется, если есть необработанные)</li>
+            <li><strong>Загрузить отчёт</strong> — загрузить новый JSON-файл</li>
+            <li><strong>Просмотр компьютеров</strong> — открыть реестр оборудования</li>
+            <li><strong>Управление пользователями</strong> — доступно только администраторам</li>
+        </ul>
+
+        <h3>📈 Последняя активность</h3>
+        <p>Две таблицы показывают последние 5 загрузок отчётов и последние 5 передач компьютеров.</p>
+    </div>
+
+    <div class="section" id="reports">
+        <h2>6. Загрузка отчётов</h2>
+        <p>JSON-отчёты формируются клиентским приложением на компьютерах сотрудников и содержат полную информацию о железе, ОС и сети.</p>
+
+        <h3>Как загрузить отчёт:</h3>
+        <div class="step">
+            <span class="step-number">1</span> Перейдите в раздел <strong>"Отчёты"</strong> в верхнем меню
+        </div>
+        <div class="step">
+            <span class="step-number">2</span> Нажмите кнопку <strong>"Загрузить новый отчёт"</strong>
+        </div>
+        <div class="step">
+            <span class="step-number">3</span> Выберите JSON-файл на вашем компьютере
+        </div>
+        <div class="step">
+            <span class="step-number">4</span> Нажмите <strong>"Загрузить"</strong>
+        </div>
+
+        <div class="note">
+            <strong>💡 Защита от дубликатов:</strong> Система автоматически вычисляет хеш файла и не позволит загрузить один и тот же отчёт дважды. Если вы попытаетесь загрузить уже существующий файл, увидите соответствующее сообщение.
+        </div>
+
+        <h3>Что происходит после загрузки:</h3>
+        <ul>
+            <li>Файл сохраняется в системе</li>
+            <li>Данные извлекаются и фильтруются (USB-устройства игнорируются)</li>
+            <li>Компьютер добавляется в <strong>очередь обработки</strong> со статусом "Новый"</li>
+            <li>Компьютер временно закрепляется за виртуальным складом</li>
+        </ul>
+    </div>
+
+    <div class="section" id="processing">
+        <h2>7. Очередь обработки</h2>
+        <p>Это ключевой раздел для администратора. Здесь обрабатываются новые компьютеры, поступившие из отчётов.</p>
+
+        <h3>Действия с компьютерами в очереди:</h3>
+        <ul>
+            <li><strong>Выберите галочками</strong> компьютеры, которые хотите обработать (или используйте "Выделить все")</li>
+            <li><strong>Добавьте комментарий</strong> к каждому ПК (например, "Полудохлый ПК", "ПК Иванова")</li>
+            <li><strong>Поставьте галочку "Создать пользователя"</strong>, если нужно создать учётную запись для владельца ПК</li>
+            <li>Если галочка установлена — появится кнопка <strong>"Настройка"</strong></li>
+        </ul>
+
+        <h3>Настройка нового пользователя:</h3>
+        <div class="step">
+            <span class="step-number">1</span> Нажмите кнопку <strong>"Настройка"</strong>
+        </div>
+        <div class="step">
+            <span class="step-number">2</span> В открывшемся окне исправьте ФИО (например, уберите слово "Склад")
+        </div>
+        <div class="step">
+            <span class="step-number">3</span> Логин сгенерируется автоматически по ГОСТ (например, <code>ivanov.ii</code>)
+        </div>
+        <div class="step">
+            <span class="step-number">4</span> Если логин уже занят — система автоматически подберёт уникальный вариант
+        </div>
+        <div class="step">
+            <span class="step-number">5</span> Нажмите <strong>"Сохранить"</strong>
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Важно:</strong> Нельзя нажать "Обработать выбранные", пока все пользователи с галочкой "Создать пользователя" не будут настроены.
+        </div>
+
+        <p>После нажатия <strong>"Обработать выбранные"</strong>:</p>
+        <ul>
+            <li>Для ПК с галочкой "Создать пользователя" — создаётся учётная запись, ПК закрепляется за новым пользователем</li>
+            <li>Для остальных ПК — они остаются на складе, но помечаются как "Обработанные"</li>
+        </ul>
+    </div>
+
+    <div class="section" id="computers">
+        <h2>8. Реестр компьютеров</h2>
+        <p>Раздел <strong>"Компьютеры"</strong> показывает все ПК, когда-либо загруженные в систему.</p>
+        
+        <h3>Таблица содержит:</h3>
+        <ul>
+            <li><strong>ID</strong> — уникальный номер</li>
+            <li><strong>Имя ПК</strong> — сетевое имя компьютера</li>
+            <li><strong>Текущий владелец</strong> — логин пользователя или "Склад"</li>
+            <li><strong>Статус</strong> — "Новый" или "Обработан"</li>
+            <li><strong>Действия</strong> — кнопки "Просмотр" и "Передать"</li>
+        </ul>
+
+        <div class="tip">
+            <strong>✅ Экспорт:</strong> В правом верхнем углу есть кнопка <strong>"Экспорт в Excel"</strong> для выгрузки всего реестра.
+        </div>
+    </div>
+
+    <div class="section" id="computer-card">
+        <h2>9. Карточка компьютера</h2>
+        <p>Подробная информация о конкретном ПК, содержащая:</p>
+        <ul>
+            <li>Серийный номер</li>
+            <li>Материнская плата</li>
+            <li>Процессор (модель, ядра, потоки)</li>
+            <li>Оперативная память (объём и модули)</li>
+            <li>Накопители (без USB-устройств)</li>
+            <li>Операционная система</li>
+            <li>IP-адрес</li>
+            <li><strong>Текущий владелец</strong></li>
+            <li>От кого получен отчёт</li>
+            <li>Комментарий</li>
+            <li>Дата добавления в БД</li>
+        </ul>
+        <p>Из карточки можно перейти к передаче компьютера или вернуться к списку.</p>
+    </div>
+
+    <div class="section" id="transfer">
+        <h2>10. Передача компьютера</h2>
+        <p>Через эту форму можно изменить владельца компьютера.</p>
+
+        <h3>Возможные сценарии:</h3>
+        <ul>
+            <li><strong>Со склада → Сотруднику:</strong> выберите пользователя из списка</li>
+            <li><strong>От сотрудника → Сотруднику:</strong> выберите другого пользователя</li>
+            <li><strong>От сотрудника → На склад:</strong> поставьте галочку "Вернуть на склад"</li>
+        </ul>
+
+        <div class="step">
+            <span class="step-number">1</span> В поле <strong>"От кого"</strong> отображается текущий владелец
+        </div>
+        <div class="step">
+            <span class="step-number">2</span> Выберите нового владельца из выпадающего списка
+        </div>
+        <div class="step">
+            <span class="step-number">3</span> При необходимости добавьте комментарий к передаче
+        </div>
+        <div class="step">
+            <span class="step-number">4</span> Нажмите <strong>"Подтвердить передачу"</strong>
+        </div>
+
+        <div class="note">
+            <strong>💡 История:</strong> Каждая передача автоматически записывается в журнал истории.
+        </div>
+    </div>
+
+    <div class="section" id="history">
+        <h2>11. История передач</h2>
+        <p>Раздел <strong>"История"</strong> содержит журнал всех перемещений оборудования в системе.</p>
+        
+        <h3>Для каждой записи отображается:</h3>
+        <ul>
+            <li><strong>Дата и время</strong> передачи</li>
+            <li><strong>Компьютер</strong> (имя и серийный номер)</li>
+            <li><strong>От кого</strong> (предыдущий владелец или "Склад")</li>
+            <li><strong>Кому</strong> (новый владелец или "Склад")</li>
+            <li><strong>Кто выполнил</strong> (администратор, осуществивший передачу)</li>
+            <li><strong>Комментарий</strong></li>
+        </ul>
+
+        <div class="tip">
+            <strong>✅ Экспорт:</strong> История также может быть выгружена в Excel.
+        </div>
+    </div>
+
+    <div class="section" id="users">
+        <h2>12. Управление пользователями</h2>
+        <div class="warning">
+            <strong>️ Доступно только администраторам!</strong>
+        </div>
+
+        <h3>Возможности:</h3>
+        <ul>
+            <li><strong>Создание пользователя:</strong> введите ФИО — логин сгенерируется автоматически по ГОСТ Р 7.0.34-2014</li>
+            <li><strong>Редактирование:</strong> изменение ФИО, роли, пароля</li>
+            <li><strong>Просмотр ПК:</strong> кнопка "ПК" показывает закреплённое оборудование и позволяет добавлять/забирать компьютеры</li>
+            <li><strong>Удаление:</strong> удаление пользователя (только если за ним не закреплены компьютеры)</li>
+        </ul>
+
+        <h3>Роли пользователей:</h3>
+        <table>
+            <tr>
+                <th>Роль</th>
+                <th>Права</th>
+            </tr>
+            <tr>
+                <td><strong>Администратор</strong></td>
+                <td>Полный доступ ко всем функциям, включая управление пользователями</td>
+            </tr>
+            <tr>
+                <td><strong>Редактор</strong></td>
+                <td>Загрузка отчётов, обработка, передача компьютеров</td>
+            </tr>
+            <tr>
+                <td><strong>Наблюдатель</strong></td>
+                <td>Только просмотр данных</td>
+            </tr>
+            <tr>
+                <td><strong>Заблокирован</strong></td>
+                <td>Нет доступа к системе</td>
+            </tr>
+        </table>
+
+        <div class="note">
+            <strong> Автогенерация логина:</strong> Если логин уже существует, система автоматически добавит дополнительные буквы из имени/отчества. Например: <code>ivanov.ii</code> → <code>ivanov.iiи</code> → <code>ivanov.ivan</code> и т.д.
+        </div>
+    </div>
+
+    <div class="section" id="scripts">
+        <h2>13. Административные скрипты</h2>
+        <p>В папке <code>admin-scripts/</code> находятся два вспомогательных скрипта для администраторов:</p>
+
+        <h3>🔧 fix-permissions.sh — Исправление прав доступа</h3>
+        <p>Используется после каждого обновления через <code>git pull</code> для восстановления правильных прав на файлы.</p>
+        
+        <h4>Использование:</h4>
+        <pre><code>cd /volume1/web/inventory-web
+./admin-scripts/fix-permissions.sh</code></pre>
+
+        <h4>Параметры (опционально):</h4>
+        <pre><code>./admin-scripts/fix-permissions.sh [ПУТЬ_К_ПРОЕКТУ] [ВЛАДЕЛЕЦ] [ГРУППА] [WEB_ПОЛЬЗОВАТЕЛЬ]</code></pre>
+
+        <p>Пример с кастомными параметрами:</p>
+        <pre><code>./admin-scripts/fix-permissions.sh /volume1/web/inventory-web myuser mygroup www-data</code></pre>
+
+        <div class="note">
+            <strong>💡 По умолчанию:</strong> скрипт использует текущего пользователя и группу, а также пользователя <code>http</code> для веб-сервера.
+        </div>
+
+        <h3>🗑️ reset-inventory.sh — Сброс данных</h3>
+        <p>Используется для очистки базы данных от тестовых данных. Удаляет все компьютеры, отчёты и передачи, но сохраняет пользователей.</p>
+        
+        <h4>Использование:</h4>
+        <pre><code>./admin-scripts/reset-inventory.sh</code></pre>
+
+        <h4>Параметры (опционально):</h4>
+        <pre><code>./admin-scripts/reset-inventory.sh [ПУТЬ_К_ПРОЕКТУ]</code></pre>
+
+        <div class="warning">
+            <strong>️ Осторожно:</strong> Скрипт запросит подтверждение перед удалением данных.
+        </div>
+    </div>
+
+    <div class="section" id="export">
+        <h2>14. Экспорт в Excel</h2>
+        <p>Функция экспорта доступна в разделах:</p>
+        <ul>
+            <li><strong>Компьютеры</strong> — полный реестр оборудования</li>
+            <li><strong>История</strong> — журнал всех передач</li>
+        </ul>
+
+        <h3>Как экспортировать:</h3>
+        <div class="step">
+            <span class="step-number">1</span> Перейдите в нужный раздел
+        </div>
+        <div class="step">
+            <span class="step-number">2</span> Нажмите зелёную кнопку <strong>"Экспорт в Excel"</strong>
+        </div>
+        <div class="step">
+            <span class="step-number">3</span> Файл автоматически скачается в формате <code>.xls</code>
+        </div>
+        <div class="step">
+            <span class="step-number">4</span> Откройте файл в Microsoft Excel, LibreOffice Calc или другом табличном редакторе
+        </div>
+
+        <div class="tip">
+            <strong>✅ Совместимость:</strong> Файлы корректно отображают кириллицу и могут быть сохранены в формат <code>.xlsx</code> через сам Excel.
+        </div>
+    </div>
+
+</div>
+
+<div class="footer">
+    <p>Inventory Web — Руководство пользователя</p>
+    <p>Разработано <a href="https://github.com/vpupkin123" target="_blank">vpupkin123</a></p>
+</div>
+
+</body>
+</html>
