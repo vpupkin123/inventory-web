@@ -38,3 +38,6 @@ App::route('POST', '/users/store', 'UserController', 'store');
 App::route('GET', '/users/edit', 'UserController', 'edit');
 App::route('POST', '/users/update', 'UserController', 'update');
 App::route('GET', '/users/block', 'UserController', 'toggleBlock');
+
+// AJAX endpoints
+App::route('GET', '/api/check-login', 'ApiController', 'checkLogin');

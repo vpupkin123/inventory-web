@@ -16,6 +16,10 @@ class UserController
     public function create(): void
     {
         Auth::requireRole('admin');
+        
+        // Clear old form data
+        unset($_SESSION['form_data']);
+        
         View::render('users/form', [
             'user' => null,
             'error' => $_SESSION['user_error'] ?? null,
@@ -34,6 +38,15 @@ class UserController
         $password = $_POST['password'] ?? '';
         $role = $_POST['role'] ?? 'viewer';
         $login = trim($_POST['login'] ?? '');
+
+        // Save form data to session
+        $_SESSION['form_data'] = [
+            'last_name' => $lastName,
+            'first_name' => $firstName,
+            'middle_name' => $middleName,
+            'login' => $login,
+            'role' => $role
+        ];
 
         if (empty($lastName) || empty($firstName) || empty($password)) {
             $_SESSION['user_error'] = Lang::t('change_password.error_empty');
@@ -69,6 +82,9 @@ class UserController
             ");
             $stmt->execute([$login, $hash, $lastName, $firstName, $middleName, $role]);
 
+            // Clear form data on success
+            unset($_SESSION['form_data']);
+            
             $_SESSION['user_success'] = Lang::t('users.success_created') . ' ' . Lang::t('users.login') . ': ' . $login;
             header('Location: /users');
             exit;
