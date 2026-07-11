@@ -4,6 +4,7 @@
  * JSON report parser
  * Handles the real structure from the client app:
  * { User, System, Hardware: { Computer, Motherboard, Cpu, Ram, Storage } }
+ * Automatically fixes Windows BOM and trailing whitespace issues.
  */
 class JsonParser
 {
@@ -29,6 +30,16 @@ class JsonParser
         if ($content === false) {
             throw new RuntimeException("Cannot read file: $filePath");
         }
+
+        // === Fix WINDOWS ===
+        // 1. Deleting UTF-8 BOM
+        if (substr($content, 0, 3) === "\xEF\xBB\xBF") {
+            $content = substr($content, 3);
+        }
+        
+        // 2. Deleting spaces
+        $content = trim($content);
+        // ====================================
 
         $data = json_decode($content, true);
         if (json_last_error() !== JSON_ERROR_NONE) {
@@ -127,7 +138,7 @@ class JsonParser
             'composite_key'   => $compositeKey,
             'manufacturer'    => $computer['Manufacturer'] ?? '',
             'model'           => $computer['Model'] ?? '',
-            'motherboard'     => ($motherboard['Manufacturer'] ?? '') . ' ' . ($motherboard['Model'] ?? ''),
+            'motherboard'     => trim(($motherboard['Manufacturer'] ?? '') . ' ' . ($motherboard['Model'] ?? '')),
             'cpu_name'        => trim($cpu['Name'] ?? ''),
             'cpu_cores'       => (int)($cpu['Cores'] ?? 0),
             'cpu_threads'     => (int)($cpu['LogicalProcessors'] ?? 0),
