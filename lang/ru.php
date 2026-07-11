@@ -177,4 +177,6 @@ return [
     'users.error_has_computers' => 'Нельзя удалить пользователя: за ним закреплены компьютеры.',
     'users.success_deleted' => 'Пользователь успешно удалён.',
     'users.confirm_delete' => 'Вы уверены, что хотите удалить этого пользователя?',
+
+    'common.export' => 'Экспорт в Excel',
 ];

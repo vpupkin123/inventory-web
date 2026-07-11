@@ -46,7 +46,7 @@
                     <td style="padding: 10px; border: 1px solid #ddd;">
                         <?php if (!$isWarehouse && !$isSelf): ?>
                             <a href="/users/edit?id=<?= $u['id'] ?>" class="btn" style="padding: 5px 10px; font-size: 0.9em;"><?= Lang::t('users.edit') ?></a>
-                            <a href="/users/block?id=<?= $u['id'] ?>" class="btn" style="padding: 5px 10px; font-size: 0.9em; background: #dc3545;" onclick="return confirm('<?= Lang::t('users.confirm_delete') ?>');"><?= Lang::t('users.delete') ?></a>
+                            <a href="/users/delete?id=<?= $u['id'] ?>" class="btn" style="padding: 5px 10px; font-size: 0.9em; background: #dc3545;" onclick="return confirm('<?= Lang::t('users.confirm_delete') ?>');"><?= Lang::t('users.delete') ?></a>
                         <?php else: ?>
                             <span style="color: #999;">—</span>
                         <?php endif; ?>

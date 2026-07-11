@@ -1,7 +1,12 @@
 <div class="card">
     <h2><?= Lang::t('computers.title') ?></h2>
+    <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2><?= Lang::t('computers.title') ?></h2>
+        <a href="/computers/export" class="btn" style="background: #28a745;"><?= Lang::t('common.export') ?></a>
+    </div>
     <br>
-
+    
     <?php if (empty($computers)): ?>
         <p><?= Lang::t('computers.empty') ?></p>
     <?php else: ?>

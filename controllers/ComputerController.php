@@ -136,4 +136,53 @@ class ComputerController
             exit;
         }
     }
+
+        public function export(): void
+    {
+        Auth::requireAuth();
+        $pdo = Database::getConnection();
+
+        $stmt = $pdo->query("
+            SELECT c.*, u.login 
+            FROM computers c 
+            LEFT JOIN users u ON c.current_user_id = u.id 
+            ORDER BY c.id DESC
+        ");
+        $computers = $stmt->fetchAll();
+
+        $headers = [
+            Lang::t('computers.id'),
+            Lang::t('computers.name'),
+            Lang::t('computer.serial'),
+            Lang::t('computer.mb'),
+            Lang::t('computer.cpu'),
+            Lang::t('computer.ram'),
+            Lang::t('computer.storage'),
+            Lang::t('computer.os'),
+            Lang::t('computer.ip'),
+            Lang::t('computers.owner'),
+            Lang::t('computer.comment'),
+            Lang::t('computer.created_at')
+        ];
+
+        $rows = [];
+        foreach ($computers as $c) {
+            $rows[] = [
+                $c['id'],
+                $c['computer_name'],
+                $c['serial_number'] ?: 'N/A',
+                $c['motherboard'],
+                $c['cpu_name'] . " ({$c['cpu_cores']}C/{$c['cpu_threads']}T)",
+                $c['ram_total_gb'] . " GB\n" . $c['ram_details'],
+                $c['storage_info'],
+                $c['os_caption'] . " ({$c['os_build']})",
+                $c['ip_address'],
+                $c['login'] ?: Lang::t('history.warehouse'),
+                $c['comment'],
+                $c['created_at']
+            ];
+        }
+
+        Export::toExcel('computers_' . date('Y-m-d') . '.xls', $headers, $rows);
+    }
 }

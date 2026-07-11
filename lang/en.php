@@ -177,4 +177,6 @@ return [
     'users.error_has_computers' => 'Cannot delete user: they have assigned computers.',
     'users.success_deleted' => 'User deleted successfully.',
     'users.confirm_delete' => 'Are you sure you want to delete this user?',
+
+    'common.export' => 'Export to Excel',
 ];

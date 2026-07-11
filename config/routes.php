@@ -28,6 +28,8 @@ App::route('GET', '/computers', 'ComputerController', 'index');
 App::route('GET', '/computer', 'ComputerController', 'show');
 App::route('GET', '/computer/transfer', 'ComputerController', 'showTransfer');
 App::route('POST', '/computer/transfer', 'ComputerController', 'transfer');
+App::route('GET', '/computers/export', 'ComputerController', 'export');
+App::route('GET', '/transfers/export', 'TransferController', 'export');
 
 App::route('GET', '/transfers', 'TransferController', 'index');
 
