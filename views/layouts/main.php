@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= Lang::getLocale() ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +8,36 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: Arial, sans-serif; background: #f5f5f5; }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        .navbar { background: #333; color: white; padding: 15px 20px; }
+        .navbar { 
+            background: #333; 
+            color: white; 
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
         .navbar a { color: white; text-decoration: none; margin-right: 20px; }
-        .navbar .right { float: right; }
+        .navbar .right { 
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .lang-switcher {
+            position: relative;
+            display: inline-block;
+        }
+        .lang-switcher select {
+            background: #555;
+            color: white;
+            border: 1px solid #777;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .lang-switcher select:hover {
+            background: #666;
+        }
         .card { background: white; border-radius: 5px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .btn { display: inline-block; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; text-decoration: none; }
         .btn:hover { background: #0056b3; }
@@ -25,12 +52,27 @@
 <body>
     <?php if (Auth::check()): ?>
     <div class="navbar">
-        <a href="/dashboard">Dashboard</a>
-        <span class="right">
-            Logged in as: <strong><?= htmlspecialchars($user['name'] ?? '') ?></strong>
-            (<?= htmlspecialchars($user['role'] ?? '') ?>)
-            <a href="/logout">Logout</a>
-        </span>
+        <div class="left">
+            <a href="/dashboard"><?= Lang::t('nav.dashboard') ?></a>
+        </div>
+        <div class="right">
+            <!-- Language switcher -->
+            <form method="POST" action="/lang" style="display: inline;">
+                <div class="lang-switcher">
+                    <select name="locale" onchange="this.form.submit()">
+                        <option value="en" <?= Lang::is('en') ? 'selected' : '' ?>>🇬🇧 EN</option>
+                        <option value="ru" <?= Lang::is('ru') ? 'selected' : '' ?>>🇷🇺 RU</option>
+                    </select>
+                </div>
+            </form>
+
+            <span>
+                <?= Lang::t('nav.logged_in_as') ?>: 
+                <strong><?= htmlspecialchars($user['name'] ?? '') ?></strong>
+                (<?= htmlspecialchars($user['role'] ?? '') ?>)
+            </span>
+            <a href="/logout"><?= Lang::t('nav.logout') ?></a>
+        </div>
     </div>
     <?php endif; ?>
 

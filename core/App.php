@@ -24,6 +24,9 @@ class App
     {
         session_start();
 
+        // Initialize language system
+        Lang::init();
+
         $requestUri = $_SERVER['REQUEST_URI'] ?? '/';
         $path = parse_url($requestUri, PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
@@ -76,7 +79,7 @@ class App
     private static function show404(string $message = ''): void
     {
         http_response_code(404);
-        echo "<h1>404 Not Found</h1>";
+        echo "<h1>" . Lang::t('common.error_404') . "</h1>";
         if ($message) {
             echo "<p>" . htmlspecialchars($message) . "</p>";
         }

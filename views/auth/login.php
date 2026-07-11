@@ -1,5 +1,5 @@
 <div class="card" style="max-width: 400px; margin: 50px auto;">
-    <h2>Login</h2>
+    <h2><?= Lang::t('login.title') ?></h2>
     <br>
 
     <?php if ($error): ?>
@@ -8,15 +8,15 @@
 
     <form method="POST" action="/login">
         <div class="form-group">
-            <label>Login:</label>
+            <label><?= Lang::t('login.login') ?>:</label>
             <input type="text" name="login" value="<?= htmlspecialchars($old_login) ?>" required autofocus>
         </div>
 
         <div class="form-group">
-            <label>Password:</label>
+            <label><?= Lang::t('login.password') ?>:</label>
             <input type="password" name="password" required>
         </div>
 
-        <button type="submit" class="btn">Login</button>
+        <button type="submit" class="btn"><?= Lang::t('login.submit') ?></button>
     </form>
 </div>

@@ -1,5 +1,8 @@
 <?php
 
+// Language switcher
+App::route('POST', '/lang', 'LangController', 'switch');
+
 // Authentication routes
 App::route('GET', '/login', 'AuthController', 'showLogin');
 App::route('POST', '/login', 'AuthController', 'login');

@@ -4,7 +4,6 @@ class AuthController
 {
     public function showLogin(): void
     {
-        // If already logged in, redirect to dashboard
         if (Auth::check()) {
             header('Location: /dashboard');
             exit;
@@ -15,7 +14,6 @@ class AuthController
             'old_login' => $_SESSION['old_login'] ?? ''
         ]);
 
-        // Clear session data
         unset($_SESSION['login_error'], $_SESSION['old_login']);
     }
 
@@ -25,7 +23,7 @@ class AuthController
         $password = $_POST['password'] ?? '';
 
         if (empty($login) || empty($password)) {
-            $_SESSION['login_error'] = 'Please enter login and password';
+            $_SESSION['login_error'] = Lang::t('login.error_empty');
             $_SESSION['old_login'] = $login;
             header('Location: /login');
             exit;
@@ -34,7 +32,6 @@ class AuthController
         $result = Auth::attempt($login, $password);
 
         if ($result['success']) {
-            // Check if must change password
             if ($result['user']['must_change_pwd'] == 1) {
                 header('Location: /change-password');
             } else {
@@ -42,7 +39,11 @@ class AuthController
             }
             exit;
         } else {
-            $_SESSION['login_error'] = $result['error'];
+            // Translate error messages from Auth::attempt()
+            $errorKey = $result['error'] === 'Access denied' 
+                ? 'login.error_access_denied' 
+                : 'login.error_invalid';
+            $_SESSION['login_error'] = Lang::t($errorKey);
             $_SESSION['old_login'] = $login;
             header('Location: /login');
             exit;
@@ -76,29 +77,29 @@ class AuthController
         $confirmPassword = $_POST['confirm_password'] ?? '';
 
         if (empty($newPassword) || empty($confirmPassword)) {
-            $_SESSION['password_error'] = 'Please fill in all fields';
+            $_SESSION['password_error'] = Lang::t('change_password.error_empty');
             header('Location: /change-password');
             exit;
         }
 
         if ($newPassword !== $confirmPassword) {
-            $_SESSION['password_error'] = 'Passwords do not match';
+            $_SESSION['password_error'] = Lang::t('change_password.error_mismatch');
             header('Location: /change-password');
             exit;
         }
 
         if (strlen($newPassword) < 6) {
-            $_SESSION['password_error'] = 'Password must be at least 6 characters';
+            $_SESSION['password_error'] = Lang::t('change_password.error_short');
             header('Location: /change-password');
             exit;
         }
 
         if (Auth::changePassword($_SESSION['user_id'], $newPassword)) {
-            $_SESSION['password_success'] = 'Password changed successfully';
+            $_SESSION['password_success'] = Lang::t('change_password.success');
             header('Location: /change-password');
             exit;
         } else {
-            $_SESSION['password_error'] = 'Failed to change password';
+            $_SESSION['password_error'] = Lang::t('change_password.error_failed');
             header('Location: /change-password');
             exit;
         }
