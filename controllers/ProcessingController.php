@@ -55,13 +55,15 @@ class ProcessingController
                 $newUserId = null;
 
                 if ($shouldCreateUser) {
-                    // Get computer data to extract FIO
-                    $stmt = $pdo->prepare("SELECT reported_by FROM computers WHERE id = ?");
-                    $stmt->execute([$id]);
-                    $pc = $stmt->fetch();
+                    // Get configured user data from form
+                    $config = $_POST['user_config'][$id] ?? [];
+                    $lastName = trim($config['last_name'] ?? '');
+                    $firstName = trim($config['first_name'] ?? '');
+                    $middleName = trim($config['middle_name'] ?? '');
+                    $login = trim($config['login'] ?? '');
 
-                    if (!empty($pc['reported_by'])) {
-                        $newUserId = $this->getOrCreateUser($pdo, $pc['reported_by']);
+                    if (!empty($lastName) && !empty($firstName) && !empty($login)) {
+                        $newUserId = $this->createUserFromConfig($pdo, $login, $lastName, $firstName, $middleName);
                     }
                 }
 
@@ -93,24 +95,11 @@ class ProcessingController
     /**
      * Find existing user by FIO or create a new one
      */
-    private function getOrCreateUser(PDO $pdo, string $fio): ?int
+    /**
+     * Create user from configured form data
+     */
+    private function createUserFromConfig(PDO $pdo, string $login, string $lastName, string $firstName, string $middleName): ?int
     {
-        // Parse FIO: "Заика Игорь Вячеславович" or "Заика И В"
-        $parts = preg_split('/\s+/', trim($fio));
-        $lastName = $parts[0] ?? '';
-        $firstName = $parts[1] ?? '';
-        $middleName = $parts[2] ?? '';
-
-        if (empty($lastName)) {
-            return null;
-        }
-
-        $login = Transliterator::generateLogin($lastName, $firstName, $middleName);
-
-        if (empty($login)) {
-            return null;
-        }
-
         // Check if user already exists
         $stmt = $pdo->prepare("SELECT id FROM users WHERE login = ?");
         $stmt->execute([$login]);

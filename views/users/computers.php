@@ -41,7 +41,7 @@
                         <a href="/users/computers/remove?user_id=<?= $user['id'] ?>&id=<?= $pc['id'] ?>" 
                            class="btn" 
                            style="padding: 5px 10px; font-size: 0.9em; background: #dc3545;"
-                           onclick="return confirm('<?= Lang::t('users.confirm_delete') ?>');">
+                           onclick="return confirm('<?= Lang::t('users.confirm_remove_computer') ?>');">
                             <?= Lang::t('users.remove_computer') ?>
                         </a>
                     </td>

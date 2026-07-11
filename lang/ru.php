@@ -191,4 +191,10 @@ return [
     'users.computer_removed' => 'Компьютер возвращен на склад.',
     'users.error_computer_not_warehouse' => 'Компьютер не на складе.',
     'users.error_computer_already_assigned' => 'Компьютер уже закреплен.',
+    'users.confirm_remove_computer' => 'Вы уверены, что хотите вернуть этот компьютер на склад?',
+    'processing.settings' => 'Настройка',
+    'processing.configure_user' => 'Настройка пользователя',
+    'processing.user_not_configured' => 'Пользователь не настроен. Нажмите "Настройка" и сохраните.',
+    'processing.save' => 'Сохранить',
+    'processing.cancel' => 'Отмена',
 ];

@@ -191,4 +191,10 @@ return [
     'users.computer_removed' => 'Computer returned to warehouse.',
     'users.error_computer_not_warehouse' => 'Computer is not on warehouse.',
     'users.error_computer_already_assigned' => 'Computer is already assigned.',
+    'users.confirm_remove_computer' => 'Are you sure you want to return this computer to warehouse?',
+    'processing.settings' => 'Settings',
+    'processing.configure_user' => 'Configure User',
+    'processing.user_not_configured' => 'User is not configured. Please click "Settings" and save.',
+    'processing.save' => 'Save',
+    'processing.cancel' => 'Cancel',
 ];
