@@ -165,4 +165,16 @@ return [
     'users.error_self_action' => 'Вы не можете выполнить это действие над собой.',
     'users.error_warehouse' => 'Нельзя изменять виртуального пользователя склада.',
     'users.error_login_exists' => 'Такой логин уже существует.',
+
+    // Users Form
+    'users.last_name' => 'Фамилия',
+    'users.first_name' => 'Имя',
+    'users.middle_name' => 'Отчество',
+    'users.login_generated' => 'Логин будет сгенерирован автоматически',
+    'users.login_editable' => 'Вы можете отредактировать сгенерированный логин',
+    
+    // Users Delete
+    'users.error_has_computers' => 'Нельзя удалить пользователя: за ним закреплены компьютеры.',
+    'users.success_deleted' => 'Пользователь успешно удалён.',
+    'users.confirm_delete' => 'Вы уверены, что хотите удалить этого пользователя?',
 ];

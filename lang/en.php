@@ -165,4 +165,16 @@ return [
     'users.error_self_action' => 'You cannot perform this action on yourself.',
     'users.error_warehouse' => 'Cannot modify the virtual warehouse user.',
     'users.error_login_exists' => 'Login already exists.',
+
+    // Users Form
+    'users.last_name' => 'Last Name',
+    'users.first_name' => 'First Name',
+    'users.middle_name' => 'Middle Name',
+    'users.login_generated' => 'Login will be generated automatically',
+    'users.login_editable' => 'You can edit the generated login',
+    
+    // Users Delete
+    'users.error_has_computers' => 'Cannot delete user: they have assigned computers.',
+    'users.success_deleted' => 'User deleted successfully.',
+    'users.confirm_delete' => 'Are you sure you want to delete this user?',
 ];

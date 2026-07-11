@@ -28,14 +28,14 @@ class UserController
     {
         Auth::requireRole('admin');
 
-        $login = trim($_POST['login'] ?? '');
-        $password = $_POST['password'] ?? '';
         $lastName = trim($_POST['last_name'] ?? '');
         $firstName = trim($_POST['first_name'] ?? '');
         $middleName = trim($_POST['middle_name'] ?? '');
+        $password = $_POST['password'] ?? '';
         $role = $_POST['role'] ?? 'viewer';
+        $login = trim($_POST['login'] ?? '');
 
-        if (empty($login) || empty($password) || empty($lastName) || empty($firstName)) {
+        if (empty($lastName) || empty($firstName) || empty($password)) {
             $_SESSION['user_error'] = Lang::t('change_password.error_empty');
             header('Location: /users/create');
             exit;
@@ -47,13 +47,18 @@ class UserController
 
         $pdo = Database::getConnection();
 
-        // Check duplicate login
-        $stmt = $pdo->prepare("SELECT id FROM users WHERE login = ?");
-        $stmt->execute([$login]);
-        if ($stmt->fetch()) {
-            $_SESSION['user_error'] = Lang::t('users.error_login_exists');
-            header('Location: /users/create');
-            exit;
+        // Auto-generate login if empty
+        if (empty($login)) {
+            $login = $this->generateUniqueLogin($pdo, $lastName, $firstName, $middleName);
+        } else {
+            // Check if provided login already exists
+            $stmt = $pdo->prepare("SELECT id FROM users WHERE login = ?");
+            $stmt->execute([$login]);
+            if ($stmt->fetch()) {
+                $_SESSION['user_error'] = Lang::t('users.error_login_exists');
+                header('Location: /users/create');
+                exit;
+            }
         }
 
         try {
@@ -64,7 +69,7 @@ class UserController
             ");
             $stmt->execute([$login, $hash, $lastName, $firstName, $middleName, $role]);
 
-            $_SESSION['user_success'] = Lang::t('users.success_created');
+            $_SESSION['user_success'] = Lang::t('users.success_created') . ' ' . Lang::t('users.login') . ': ' . $login;
             header('Location: /users');
             exit;
         } catch (Exception $e) {
@@ -164,6 +169,107 @@ class UserController
         $stmt = $pdo->prepare("UPDATE users SET role = 'none' WHERE id = ?");
         $stmt->execute([$id]);
 
+        header('Location: /users');
+        exit;
+    }
+
+    /**
+    * Generate unique login from FIO with collision handling
+    */
+    private function generateUniqueLogin(PDO $pdo, string $lastName, string $firstName, string $middleName): string
+    {
+        $baseLogin = Transliterator::generateLogin($lastName, $firstName, $middleName);
+        
+        if (empty($baseLogin)) {
+            return 'user' . time();
+        }
+
+        // Check if base login is available
+        $stmt = $pdo->prepare("SELECT id FROM users WHERE login = ?");
+        $stmt->execute([$baseLogin]);
+        if (!$stmt->fetch()) {
+            return $baseLogin;
+        }
+
+        // Collision: try adding more letters from first/middle name
+        $firstNameTranslit = Transliterator::transliterate($firstName);
+        $middleNameTranslit = Transliterator::transliterate($middleName);
+        
+        $basePrefix = mb_strtolower(Transliterator::transliterate($lastName), 'UTF-8');
+        
+        // Try adding 2 letters from first name
+        if (mb_strlen($firstNameTranslit) >= 2) {
+            $login = $basePrefix . '.' . mb_strtolower(mb_substr($firstNameTranslit, 0, 2), 'UTF-8');
+            $stmt->execute([$login]);
+            if (!$stmt->fetch()) {
+                return $login;
+            }
+        }
+        
+        // Try adding 2 letters from first + 1 from middle
+        if (mb_strlen($firstNameTranslit) >= 2 && mb_strlen($middleNameTranslit) >= 1) {
+            $login = $basePrefix . '.' . 
+                     mb_strtolower(mb_substr($firstNameTranslit, 0, 2), 'UTF-8') . 
+                     mb_strtolower(mb_substr($middleNameTranslit, 0, 1), 'UTF-8');
+            $stmt->execute([$login]);
+            if (!$stmt->fetch()) {
+                return $login;
+            }
+        }
+        
+        // Try adding 3 letters from first name
+        if (mb_strlen($firstNameTranslit) >= 3) {
+            $login = $basePrefix . '.' . mb_strtolower(mb_substr($firstNameTranslit, 0, 3), 'UTF-8');
+            $stmt->execute([$login]);
+            if (!$stmt->fetch()) {
+                return $login;
+            }
+        }
+        
+        // Fallback: add numeric suffix
+        $counter = 2;
+        while (true) {
+            $login = $baseLogin . $counter;
+            $stmt->execute([$login]);
+            if (!$stmt->fetch()) {
+                return $login;
+            }
+            $counter++;
+            if ($counter > 999) {
+                return $baseLogin . '_' . time();
+            }
+        }
+    }
+
+    public function delete(): void
+    {
+        Auth::requireRole('admin');
+        $id = (int)($_GET['id'] ?? 0);
+
+        if ($id <= 0 || $id === (int)$_SESSION['user_id'] || $id === Database::getWarehouseId()) {
+            $_SESSION['user_error'] = Lang::t('users.error_self_action');
+            header('Location: /users');
+            exit;
+        }
+
+        $pdo = Database::getConnection();
+
+        // Check if user has computers
+        $stmt = $pdo->prepare("SELECT COUNT(*) FROM computers WHERE current_user_id = ?");
+        $stmt->execute([$id]);
+        $count = (int)$stmt->fetchColumn();
+
+        if ($count > 0) {
+            $_SESSION['user_error'] = Lang::t('users.error_has_computers');
+            header('Location: /users');
+            exit;
+        }
+
+        // Delete user
+        $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
+        $stmt->execute([$id]);
+
+        $_SESSION['user_success'] = Lang::t('users.success_deleted');
         header('Location: /users');
         exit;
     }
