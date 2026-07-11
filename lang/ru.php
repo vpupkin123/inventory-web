@@ -179,4 +179,16 @@ return [
     'users.confirm_delete' => 'Вы уверены, что хотите удалить этого пользователя?',
 
     'common.export' => 'Экспорт в Excel',
+
+    // User Computers
+    'users.computers' => 'ПК',
+    'users.computers_title' => 'Компьютеры пользователя',
+    'users.no_computers' => 'Нет закрепленных компьютеров.',
+    'users.add_computer' => 'Добавить ПК',
+    'users.remove_computer' => 'Забрать',
+    'users.select_computer' => 'Выберите компьютер со склада',
+    'users.computer_added' => 'Компьютер добавлен пользователю.',
+    'users.computer_removed' => 'Компьютер возвращен на склад.',
+    'users.error_computer_not_warehouse' => 'Компьютер не на складе.',
+    'users.error_computer_already_assigned' => 'Компьютер уже закреплен.',
 ];

@@ -41,6 +41,9 @@ App::route('GET', '/users/edit', 'UserController', 'edit');
 App::route('POST', '/users/update', 'UserController', 'update');
 App::route('GET', '/users/block', 'UserController', 'toggleBlock');
 App::route('GET', '/users/delete', 'UserController', 'delete');
+App::route('GET', '/users/computers', 'UserController', 'computers');
+App::route('POST', '/users/computers/add', 'UserController', 'addComputer');
+App::route('GET', '/users/computers/remove', 'UserController', 'removeComputer');
 
 // AJAX endpoints
 App::route('GET', '/api/check-login', 'ApiController', 'checkLogin');

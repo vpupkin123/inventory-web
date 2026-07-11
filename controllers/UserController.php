@@ -289,4 +289,132 @@ class UserController
         header('Location: /users');
         exit;
     }
+
+        public function computers(): void
+    {
+        Auth::requireRole('admin');
+        $userId = (int)($_GET['id'] ?? 0);
+
+        $pdo = Database::getConnection();
+        
+        // Get user info
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+        $stmt->execute([$userId]);
+        $user = $stmt->fetch();
+
+        if (!$user) {
+            header('Location: /users');
+            exit;
+        }
+
+        // Get computers assigned to this user
+        $stmt = $pdo->prepare("SELECT * FROM computers WHERE current_user_id = ? ORDER BY id DESC");
+        $stmt->execute([$userId]);
+        $computers = $stmt->fetchAll();
+
+        // Get computers on warehouse (for adding)
+        $warehouseId = Database::getWarehouseId();
+        $stmt = $pdo->prepare("SELECT * FROM computers WHERE current_user_id = ? ORDER BY id DESC");
+        $stmt->execute([$warehouseId]);
+        $warehouseComputers = $stmt->fetchAll();
+
+        View::render('users/computers', [
+            'user' => $user,
+            'computers' => $computers,
+            'warehouseComputers' => $warehouseComputers,
+            'error' => $_SESSION['user_error'] ?? null,
+            'success' => $_SESSION['user_success'] ?? null
+        ]);
+        unset($_SESSION['user_error'], $_SESSION['user_success']);
+    }
+
+    public function addComputer(): void
+    {
+        Auth::requireRole('admin');
+        $userId = (int)($_POST['user_id'] ?? 0);
+        $computerId = (int)($_POST['computer_id'] ?? 0);
+
+        if ($userId <= 0 || $computerId <= 0) {
+            header('Location: /users');
+            exit;
+        }
+
+        $pdo = Database::getConnection();
+        $warehouseId = Database::getWarehouseId();
+
+        // Check if computer is on warehouse
+        $stmt = $pdo->prepare("SELECT current_user_id FROM computers WHERE id = ?");
+        $stmt->execute([$computerId]);
+        $computer = $stmt->fetch();
+
+        if (!$computer || (int)$computer['current_user_id'] !== $warehouseId) {
+            $_SESSION['user_error'] = Lang::t('users.error_computer_not_warehouse');
+            header('Location: /users/computers?id=' . $userId);
+            exit;
+        }
+
+        // Transfer computer to user
+        $stmt = $pdo->prepare("
+            UPDATE computers 
+            SET current_user_id = ?, updated_at = datetime('now','localtime') 
+            WHERE id = ?
+        ");
+        $stmt->execute([$userId, $computerId]);
+
+        // Log transfer
+        $stmt = $pdo->prepare("
+            INSERT INTO transfers (computer_id, from_user_id, to_user_id, transferred_by, comment, transferred_at)
+            VALUES (?, ?, ?, ?, ?, datetime('now','localtime'))
+        ");
+        $stmt->execute([$computerId, $warehouseId, $userId, $_SESSION['user_id'], 'Assigned from warehouse']);
+
+        $_SESSION['user_success'] = Lang::t('users.computer_added');
+        header('Location: /users/computers?id=' . $userId);
+        exit;
+    }
+
+    public function removeComputer(): void
+    {
+        Auth::requireRole('admin');
+        $userId = (int)($_GET['user_id'] ?? 0);
+        $computerId = (int)($_GET['id'] ?? 0);
+
+        if ($userId <= 0 || $computerId <= 0) {
+            header('Location: /users');
+            exit;
+        }
+
+        $pdo = Database::getConnection();
+        $warehouseId = Database::getWarehouseId();
+
+        // Check if computer is assigned to this user
+        $stmt = $pdo->prepare("SELECT current_user_id FROM computers WHERE id = ?");
+        $stmt->execute([$computerId]);
+        $computer = $stmt->fetch();
+
+        if (!$computer || (int)$computer['current_user_id'] !== $userId) {
+            $_SESSION['user_error'] = Lang::t('users.error_computer_already_assigned');
+            header('Location: /users/computers?id=' . $userId);
+            exit;
+        }
+
+        // Return computer to warehouse
+        $stmt = $pdo->prepare("
+            UPDATE computers 
+            SET current_user_id = ?, updated_at = datetime('now','localtime') 
+            WHERE id = ?
+        ");
+        $stmt->execute([$warehouseId, $computerId]);
+
+        // Log transfer
+        $stmt = $pdo->prepare("
+            INSERT INTO transfers (computer_id, from_user_id, to_user_id, transferred_by, comment, transferred_at)
+            VALUES (?, ?, ?, ?, ?, datetime('now','localtime'))
+        ");
+        $stmt->execute([$computerId, $userId, $warehouseId, $_SESSION['user_id'], 'Returned to warehouse']);
+
+        $_SESSION['user_success'] = Lang::t('users.computer_removed');
+        header('Location: /users/computers?id=' . $userId);
+        exit;
+    }
 }

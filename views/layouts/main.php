@@ -71,10 +71,11 @@
                 </div>
             </form>
 
+            <?php $currentUser = Auth::user(); ?>
             <span>
                 <?= Lang::t('nav.logged_in_as') ?>: 
-                <strong><?= htmlspecialchars($user['name'] ?? '') ?></strong>
-                (<?= htmlspecialchars($user['role'] ?? '') ?>)
+                <strong><?= htmlspecialchars($currentUser['name'] ?? '') ?></strong>
+                (<?= htmlspecialchars($currentUser['role'] ?? '') ?>)
             </span>
             <a href="/logout"><?= Lang::t('nav.logout') ?></a>
         </div>

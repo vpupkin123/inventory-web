@@ -45,6 +45,7 @@
                     <td style="padding: 10px; border: 1px solid #ddd;"><?= $roleName ?></td>
                     <td style="padding: 10px; border: 1px solid #ddd;">
                         <?php if (!$isWarehouse && !$isSelf): ?>
+                            <a href="/users/computers?id=<?= $u['id'] ?>" class="btn" style="padding: 5px 10px; font-size: 0.9em; background: #17a2b8;"><?= Lang::t('users.computers') ?></a>
                             <a href="/users/edit?id=<?= $u['id'] ?>" class="btn" style="padding: 5px 10px; font-size: 0.9em;"><?= Lang::t('users.edit') ?></a>
                             <a href="/users/delete?id=<?= $u['id'] ?>" class="btn" style="padding: 5px 10px; font-size: 0.9em; background: #dc3545;" onclick="return confirm('<?= Lang::t('users.confirm_delete') ?>');"><?= Lang::t('users.delete') ?></a>
                         <?php else: ?>

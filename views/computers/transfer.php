@@ -13,9 +13,13 @@
     <form method="POST" action="/computer/transfer">
         <input type="hidden" name="computer_id" value="<?= $computer['id'] ?>">
 
+        <!-- УЛУЧШЕННОЕ ПОЛЕ: От кого -->
         <div class="form-group">
             <label><?= Lang::t('transfer.from') ?>:</label>
-            <input type="text" value="<?= htmlspecialchars($computer['login'] ?: Lang::t('history.warehouse')) ?>" disabled style="background: #eee;">
+            <input type="text" 
+                   value="<?= !empty($computer['login']) ? htmlspecialchars($computer['login'] . ' (' . trim($computer['last_name'] . ' ' . $computer['first_name']) . ')') : Lang::t('history.warehouse') ?>" 
+                   disabled 
+                   style="background: #eee; width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
         </div>
 
         <div class="form-group">

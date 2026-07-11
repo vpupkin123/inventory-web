@@ -31,15 +31,27 @@
             <td style="padding: 8px; font-weight: bold;"><?= Lang::t('computer.ip') ?>:</td>
             <td style="padding: 8px;"><?= htmlspecialchars($computer['ip_address']) ?></td>
         </tr>
+        <!-- НОВАЯ СТРОКА: Текущий владелец -->
         <tr style="background: #f9f9f9;">
+            <td style="padding: 8px; font-weight: bold;"><?= Lang::t('computers.owner') ?>:</td>
+            <td style="padding: 8px;">
+                <?php if (!empty($computer['login'])): ?>
+                    <strong><?= htmlspecialchars($computer['login']) ?></strong> 
+                    (<?= htmlspecialchars(trim($computer['last_name'] . ' ' . $computer['first_name'])) ?>)
+                <?php else: ?>
+                    <em><?= Lang::t('history.warehouse') ?></em>
+                <?php endif; ?>
+            </td>
+        </tr>
+        <tr>
             <td style="padding: 8px; font-weight: bold;"><?= Lang::t('computer.reported_by') ?>:</td>
             <td style="padding: 8px;"><?= htmlspecialchars($computer['reported_by']) ?></td>
         </tr>
-        <tr>
+        <tr style="background: #f9f9f9;">
             <td style="padding: 8px; font-weight: bold;"><?= Lang::t('computer.comment') ?>:</td>
             <td style="padding: 8px;"><?= htmlspecialchars($computer['comment']) ?></td>
         </tr>
-        <tr style="background: #f9f9f9;">
+        <tr>
             <td style="padding: 8px; font-weight: bold;"><?= Lang::t('computer.created_at') ?>:</td>
             <td style="padding: 8px;"><?= htmlspecialchars($computer['created_at']) ?></td>
         </tr>

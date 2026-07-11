@@ -179,4 +179,16 @@ return [
     'users.confirm_delete' => 'Are you sure you want to delete this user?',
 
     'common.export' => 'Export to Excel',
+
+    // User Computers
+    'users.computers' => 'Computers',
+    'users.computers_title' => 'Computers assigned to',
+    'users.no_computers' => 'No computers assigned.',
+    'users.add_computer' => 'Add Computer',
+    'users.remove_computer' => 'Remove',
+    'users.select_computer' => 'Select computer from warehouse',
+    'users.computer_added' => 'Computer added to user.',
+    'users.computer_removed' => 'Computer returned to warehouse.',
+    'users.error_computer_not_warehouse' => 'Computer is not on warehouse.',
+    'users.error_computer_already_assigned' => 'Computer is already assigned.',
 ];

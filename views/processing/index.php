@@ -19,7 +19,10 @@
             <table style="width: 100%; border-collapse: collapse;">
                 <thead>
                     <tr style="background: #f4f4f4;">
-                        <th style="padding: 10px; border: 1px solid #ddd; width: 30px;"></th>
+                        <!-- Главный чекбокс "Выделить все" -->
+                        <th style="padding: 10px; border: 1px solid #ddd; width: 30px; text-align: center;">
+                            <input type="checkbox" id="select_all">
+                        </th>
                         <th style="padding: 10px; border: 1px solid #ddd;"><?= Lang::t('processing.computer_name') ?></th>
                         <th style="padding: 10px; border: 1px solid #ddd;"><?= Lang::t('processing.hardware') ?></th>
                         <th style="padding: 10px; border: 1px solid #ddd;"><?= Lang::t('processing.reported_by') ?></th>
@@ -30,8 +33,9 @@
                 <tbody>
                     <?php foreach ($computers as $pc): ?>
                     <tr>
+                        <!-- Обычный чекбокс (без checked по умолчанию) -->
                         <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
-                            <input type="checkbox" name="computer_ids[]" value="<?= $pc['id'] ?>" checked>
+                            <input type="checkbox" name="computer_ids[]" value="<?= $pc['id'] ?>" class="row_checkbox">
                         </td>
                         <td style="padding: 10px; border: 1px solid #ddd;">
                             <strong><?= htmlspecialchars($pc['computer_name']) ?></strong><br>
@@ -60,3 +64,19 @@
         </form>
     <?php endif; ?>
 </div>
+
+<!-- Скрипт для работы чекбокса "Выделить все" -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAll = document.getElementById('select_all');
+    const rowCheckboxes = document.querySelectorAll('.row_checkbox');
+
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            rowCheckboxes.forEach(function(checkbox) {
+                checkbox.checked = selectAll.checked;
+            });
+        });
+    }
+});
+</script>
