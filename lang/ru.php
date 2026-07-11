@@ -63,4 +63,20 @@ return [
     'common.error_404' => '404 Страница не найдена',
     'common.error_403' => '403 Доступ запрещен',
     'common.error_403_message' => 'У вас нет прав для доступа к этой странице.',
+
+    // Navigation
+    'nav.processing' => 'Обработка',
+
+    // Processing
+    'processing.title' => 'Очередь обработки компьютеров',
+    'processing.empty_queue' => 'Нет компьютеров, ожидающих обработки.',
+    'processing.computer_name' => 'Имя ПК',
+    'processing.hardware' => 'Железо',
+    'processing.reported_by' => 'От кого',
+    'processing.comment' => 'Комментарий',
+    'processing.create_user' => 'Создать пользователя',
+    'processing.process_selected' => 'Обработать выбранные',
+    'processing.no_selected' => 'Не выбрано ни одного компьютера.',
+    'processing.success' => 'Компьютеры успешно обработаны.',
+    'processing.error' => 'Ошибка при обработке компьютеров',
 ];

@@ -18,3 +18,7 @@ App::route('POST', '/reports/upload', 'ReportController', 'upload');
 // Dashboard (protected)
 App::route('GET', '/', 'DashboardController', 'index');
 App::route('GET', '/dashboard', 'DashboardController', 'index');
+
+// Processing routes
+App::route('GET', '/processing', 'ProcessingController', 'index');
+App::route('POST', '/processing/process', 'ProcessingController', 'process');

@@ -54,6 +54,8 @@
     <div class="navbar">
         <div class="left">
             <a href="/dashboard"><?= Lang::t('nav.dashboard') ?></a>
+            <a href="/reports"><?= Lang::t('nav.reports') ?></a>
+            <a href="/processing"><?= Lang::t('nav.processing') ?></a>
         </div>
         <div class="right">
             <!-- Language switcher -->

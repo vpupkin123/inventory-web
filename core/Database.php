@@ -135,12 +135,17 @@ class Database
     {
         $pdo = self::$pdo;
 
-        // Add reported_by column to computers table if not exists
         $columns = $pdo->query("PRAGMA table_info(computers)")->fetchAll(PDO::FETCH_ASSOC);
         $columnNames = array_column($columns, 'name');
         
+        // Миграция 1: поле reported_by
         if (!in_array('reported_by', $columnNames)) {
             $pdo->exec("ALTER TABLE computers ADD COLUMN reported_by TEXT DEFAULT ''");
+        }
+
+        // Миграция 2: поле is_processed (0 = в очереди на обработку, 1 = обработано)
+        if (!in_array('is_processed', $columnNames)) {
+            $pdo->exec("ALTER TABLE computers ADD COLUMN is_processed INTEGER DEFAULT 0");
         }
     }
 

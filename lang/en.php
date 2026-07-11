@@ -63,4 +63,20 @@ return [
     'common.error_404' => '404 Not Found',
     'common.error_403' => '403 Forbidden',
     'common.error_403_message' => "You don't have permission to access this page.",
+
+    // Navigation
+    'nav.processing' => 'Processing',
+
+    // Processing
+    'processing.title' => 'Computer Processing Queue',
+    'processing.empty_queue' => 'No computers waiting for processing.',
+    'processing.computer_name' => 'Computer Name',
+    'processing.hardware' => 'Hardware',
+    'processing.reported_by' => 'Reported By',
+    'processing.comment' => 'Comment',
+    'processing.create_user' => 'Create New User',
+    'processing.process_selected' => 'Process Selected',
+    'processing.no_selected' => 'No computers selected.',
+    'processing.success' => 'Computers processed successfully.',
+    'processing.error' => 'Error processing computers',
 ];
