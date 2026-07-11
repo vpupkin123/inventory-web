@@ -135,20 +135,4 @@ class Auth
             exit;
         }
     }
-
-    /**
-     * Require specific role, redirect to dashboard if not matched
-     */
-    public static function requireRole(string $role): void
-    {
-        if (!self::check()) {
-            header('Location: /login');
-            exit;
-        }
-
-        if ($_SESSION['user_role'] !== $role) {
-            header('Location: /dashboard');
-            exit;
-        }
-    }
 }
