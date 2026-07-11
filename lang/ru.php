@@ -79,4 +79,58 @@ return [
     'processing.no_selected' => 'Не выбрано ни одного компьютера.',
     'processing.success' => 'Компьютеры успешно обработаны.',
     'processing.error' => 'Ошибка при обработке компьютеров',
+
+    // Navigation
+    'nav.computers' => 'Компьютеры',
+    'nav.history' => 'История',
+
+    // Computers List
+    'computers.title' => 'Реестр компьютеров',
+    'computers.id' => 'ID',
+    'computers.name' => 'Имя ПК',
+    'computers.owner' => 'Текущий владелец',
+    'computers.status' => 'Статус',
+    'computers.actions' => 'Действия',
+    'computers.empty' => 'В базе данных пока нет компьютеров.',
+    'computers.status_warehouse' => 'Склад',
+    'computers.status_processed' => 'Обработан',
+    'computers.status_new' => 'Новый',
+    'computers.view' => 'Просмотр',
+    'computers.transfer' => 'Передать',
+
+    // Computer Card
+    'computer.title' => 'Карточка компьютера',
+    'computer.serial' => 'Серийный номер',
+    'computer.mb' => 'Материнская плата',
+    'computer.cpu' => 'Процессор',
+    'computer.ram' => 'Оперативная память',
+    'computer.storage' => 'Накопители',
+    'computer.os' => 'Операционная система',
+    'computer.ip' => 'IP-адрес',
+    'computer.reported_by' => 'Отчет от',
+    'computer.comment' => 'Комментарий',
+    'computer.created_at' => 'Добавлен в БД',
+    'computer.back_to_list' => 'Вернуться к списку',
+
+    // Transfer Form
+    'transfer.title' => 'Передача компьютера',
+    'transfer.from' => 'От кого',
+    'transfer.to_user' => 'Передать пользователю',
+    'transfer.to_warehouse' => 'Вернуть на склад',
+    'transfer.comment' => 'Комментарий к передаче',
+    'transfer.submit' => 'Подтвердить передачу',
+    'transfer.success' => 'Компьютер успешно передан.',
+    'transfer.error' => 'Ошибка при передаче',
+    'transfer.error_no_target' => 'Выберите пользователя или поставьте галочку "Вернуть на склад".',
+
+    // History
+    'history.title' => 'История перемещений',
+    'history.date' => 'Дата и время',
+    'history.computer' => 'Компьютер',
+    'history.from' => 'От кого',
+    'history.to' => 'Кому',
+    'history.by' => 'Кто выполнил',
+    'history.comment' => 'Комментарий',
+    'history.empty' => 'Передач еще не было.',
+    'history.warehouse' => 'Склад',
 ];

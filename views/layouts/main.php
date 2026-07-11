@@ -56,6 +56,8 @@
             <a href="/dashboard"><?= Lang::t('nav.dashboard') ?></a>
             <a href="/reports"><?= Lang::t('nav.reports') ?></a>
             <a href="/processing"><?= Lang::t('nav.processing') ?></a>
+            <a href="/computers"><?= Lang::t('nav.computers') ?></a>
+            <a href="/transfers"><?= Lang::t('nav.history') ?></a>
         </div>
         <div class="right">
             <!-- Language switcher -->

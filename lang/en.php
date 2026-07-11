@@ -79,4 +79,58 @@ return [
     'processing.no_selected' => 'No computers selected.',
     'processing.success' => 'Computers processed successfully.',
     'processing.error' => 'Error processing computers',
+    
+    // Navigation
+    'nav.computers' => 'Computers',
+    'nav.history' => 'History',
+
+    // Computers List
+    'computers.title' => 'Computer Inventory',
+    'computers.id' => 'ID',
+    'computers.name' => 'PC Name',
+    'computers.owner' => 'Current Owner',
+    'computers.status' => 'Status',
+    'computers.actions' => 'Actions',
+    'computers.empty' => 'No computers in the database yet.',
+    'computers.status_warehouse' => 'Warehouse',
+    'computers.status_processed' => 'Processed',
+    'computers.status_new' => 'New',
+    'computers.view' => 'View',
+    'computers.transfer' => 'Transfer',
+
+    // Computer Card
+    'computer.title' => 'Computer Details',
+    'computer.serial' => 'Serial Number',
+    'computer.mb' => 'Motherboard',
+    'computer.cpu' => 'Processor',
+    'computer.ram' => 'RAM',
+    'computer.storage' => 'Storage',
+    'computer.os' => 'Operating System',
+    'computer.ip' => 'IP Address',
+    'computer.reported_by' => 'Reported By',
+    'computer.comment' => 'Comment',
+    'computer.created_at' => 'Added to DB',
+    'computer.back_to_list' => 'Back to List',
+
+    // Transfer Form
+    'transfer.title' => 'Transfer Computer',
+    'transfer.from' => 'From',
+    'transfer.to_user' => 'Transfer to User',
+    'transfer.to_warehouse' => 'Return to Warehouse',
+    'transfer.comment' => 'Transfer Comment',
+    'transfer.submit' => 'Confirm Transfer',
+    'transfer.success' => 'Computer transferred successfully.',
+    'transfer.error' => 'Error during transfer',
+    'transfer.error_no_target' => 'Please select a user or check "Return to Warehouse".',
+
+    // History
+    'history.title' => 'Transfer History',
+    'history.date' => 'Date & Time',
+    'history.computer' => 'Computer',
+    'history.from' => 'From',
+    'history.to' => 'To',
+    'history.by' => 'Performed By',
+    'history.comment' => 'Comment',
+    'history.empty' => 'No transfers have been made yet.',
+    'history.warehouse' => 'Warehouse',
 ];

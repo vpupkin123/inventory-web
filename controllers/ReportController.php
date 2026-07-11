@@ -88,9 +88,9 @@ class ReportController
                 INSERT INTO computers 
                 (serial_number, composite_key, manufacturer, model, motherboard, cpu_name, 
                  cpu_cores, cpu_threads, ram_total_gb, ram_details, storage_info, 
-                 os_caption, os_build, ip_address, computer_name, reported_by, current_user_id)
+                 os_caption, os_build, ip_address, computer_name, reported_by, current_user_id, is_processed)
                 VALUES 
-                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)
             ");
 
             foreach ($computers as $pc) {

@@ -22,3 +22,11 @@ App::route('GET', '/dashboard', 'DashboardController', 'index');
 // Processing routes
 App::route('GET', '/processing', 'ProcessingController', 'index');
 App::route('POST', '/processing/process', 'ProcessingController', 'process');
+
+// Computers & Transfers routes
+App::route('GET', '/computers', 'ComputerController', 'index');
+App::route('GET', '/computer', 'ComputerController', 'show');
+App::route('GET', '/computer/transfer', 'ComputerController', 'showTransfer');
+App::route('POST', '/computer/transfer', 'ComputerController', 'transfer');
+
+App::route('GET', '/transfers', 'TransferController', 'index');
