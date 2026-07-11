@@ -38,6 +38,22 @@ return [
     'dashboard.view_computers' => 'Просмотр списка компьютеров',
     'dashboard.manage_users' => 'Управление пользователями (только администратор)',
 
+    // Reports
+    'report.upload_title' => 'Загрузка отчета',
+    'report.list_title' => 'Загруженные отчеты',
+    'report.select_file' => 'Выберите JSON файл',
+    'report.upload_button' => 'Загрузить',
+    'report.upload_new' => 'Загрузить новый отчет',
+    'report.no_reports' => 'Отчеты еще не загружены.',
+    'report.file_name' => 'Имя файла',
+    'report.uploaded_by' => 'Загрузил',
+    'report.uploaded_at' => 'Дата загрузки',
+    'report.error_no_file' => 'Файл не выбран или ошибка загрузки.',
+    'report.error_invalid_format' => 'Неверный формат файла. Допустимы только JSON.',
+    'report.error_duplicate' => 'Этот файл уже был загружен.',
+    'report.error_processing' => 'Ошибка обработки файла',
+    'report.success_uploaded' => 'Успешно загружено. Компьютеров добавлено на склад: :count',
+
     // Common
     'common.save' => 'Сохранить',
     'common.cancel' => 'Отмена',

@@ -38,6 +38,22 @@ return [
     'dashboard.view_computers' => 'View computers list',
     'dashboard.manage_users' => 'Manage users (admin only)',
 
+    // Reports
+    'report.upload_title' => 'Upload Report',
+    'report.list_title' => 'Uploaded Reports',
+    'report.select_file' => 'Select JSON file',
+    'report.upload_button' => 'Upload',
+    'report.upload_new' => 'Upload new report',
+    'report.no_reports' => 'No reports uploaded yet.',
+    'report.file_name' => 'File name',
+    'report.uploaded_by' => 'Uploaded by',
+    'report.uploaded_at' => 'Uploaded at',
+    'report.error_no_file' => 'No file selected or upload error.',
+    'report.error_invalid_format' => 'Invalid file format. Only JSON files are allowed.',
+    'report.error_duplicate' => 'This file has already been uploaded.',
+    'report.error_processing' => 'Error processing file',
+    'report.success_uploaded' => 'Successfully uploaded. :count computers added to warehouse.',
+
     // Common
     'common.save' => 'Save',
     'common.cancel' => 'Cancel',

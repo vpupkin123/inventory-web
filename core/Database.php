@@ -67,6 +67,7 @@ class Database
                 ip_address      TEXT,
                 computer_name   TEXT,
                 comment         TEXT    DEFAULT '',
+                reported_by     TEXT    DEFAULT '',
                 current_user_id INTEGER REFERENCES users(id),
                 created_at      TEXT    NOT NULL DEFAULT (datetime('now','localtime')),
                 updated_at      TEXT    NOT NULL DEFAULT (datetime('now','localtime'))
@@ -100,14 +101,18 @@ class Database
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_computers_user ON computers(current_user_id)");
         $pdo->exec("CREATE INDEX IF NOT EXISTS idx_processed_uploads_hash ON processed_uploads(file_hash)");
 
+        // Migrations for existing databases
+        self::migrate();
+
         // Check if warehouse user exists, create if not
         $stmt = $pdo->prepare("SELECT id FROM users WHERE login = ?");
         $stmt->execute([WAREHOUSE_LOGIN]);
         if (!$stmt->fetch()) {
-            $pdo->exec("
+            $stmt = $pdo->prepare("
                 INSERT INTO users (login, password_hash, last_name, first_name, role, must_change_pwd)
                 VALUES (?, NULL, 'Warehouse', '', 'none', 0)
-            ", [WAREHOUSE_LOGIN]);
+            ");
+            $stmt->execute([WAREHOUSE_LOGIN]);
         }
 
         // Check if admin user exists, create if not
@@ -115,10 +120,25 @@ class Database
         $stmt->execute(['admin']);
         if (!$stmt->fetch()) {
             $adminHash = password_hash('password', PASSWORD_DEFAULT);
-            $pdo->exec("
+            $stmt = $pdo->prepare("
                 INSERT INTO users (login, password_hash, last_name, first_name, role, must_change_pwd)
                 VALUES (?, ?, 'Admin', 'Admin', 'admin', 1)
-            ", ['admin', $adminHash]);
+            ");
+            $stmt->execute(['admin', $adminHash]);
+        }
+    }
+
+    /**
+     * Run migrations for existing databases (add missing columns)
+     */
+    private static function migrate(): void
+    {
+        $pdo = self::$pdo;
+
+        // Add reported_by column to computers table if not exists
+        $columns = $pdo->query("PRAGMA table_info(computers)")->fetchAll(PDO::FETCH_COLUMN);
+        if (!in_array('reported_by', $columns)) {
+            $pdo->exec("ALTER TABLE computers ADD COLUMN reported_by TEXT DEFAULT ''");
         }
     }
 
