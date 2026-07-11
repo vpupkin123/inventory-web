@@ -197,4 +197,25 @@ return [
     'processing.user_not_configured' => 'Пользователь не настроен. Нажмите "Настройка" и сохраните.',
     'processing.save' => 'Сохранить',
     'processing.cancel' => 'Отмена',
+        // Dashboard
+    'dashboard.total_computers' => 'Всего компьютеров',
+    'dashboard.assigned_computers' => 'Назначено',
+    'dashboard.warehouse_computers' => 'На складе',
+    'dashboard.unprocessed' => 'Не обработано',
+    'dashboard.total_users' => 'Пользователей',
+    'dashboard.quick_actions' => 'Быстрые действия',
+    'dashboard.process_queue' => 'Обработать очередь',
+    'dashboard.upload_report' => 'Загрузить отчет',
+    'dashboard.recent_uploads' => 'Последние загрузки',
+    'dashboard.recent_transfers' => 'Последние передачи',
+    'dashboard.no_recent_uploads' => 'Нет недавних загрузок.',
+    'dashboard.no_recent_transfers' => 'Нет недавних передач.',
+    'dashboard.file' => 'Файл',
+    'dashboard.date' => 'Дата',
+    'dashboard.computer' => 'Компьютер',
+    'dashboard.from_to' => 'От → К',
+    
+    // Footer
+    'footer.developed_by' => 'Разработано',
+    'footer.source_code' => 'Исходный код на',
 ];

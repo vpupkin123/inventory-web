@@ -197,4 +197,25 @@ return [
     'processing.user_not_configured' => 'User is not configured. Please click "Settings" and save.',
     'processing.save' => 'Save',
     'processing.cancel' => 'Cancel',
+        // Dashboard
+    'dashboard.total_computers' => 'Total Computers',
+    'dashboard.assigned_computers' => 'Assigned',
+    'dashboard.warehouse_computers' => 'On Warehouse',
+    'dashboard.unprocessed' => 'Unprocessed',
+    'dashboard.total_users' => 'Total Users',
+    'dashboard.quick_actions' => 'Quick Actions',
+    'dashboard.process_queue' => 'Process Queue',
+    'dashboard.upload_report' => 'Upload Report',
+    'dashboard.recent_uploads' => 'Recent Uploads',
+    'dashboard.recent_transfers' => 'Recent Transfers',
+    'dashboard.no_recent_uploads' => 'No recent uploads.',
+    'dashboard.no_recent_transfers' => 'No recent transfers.',
+    'dashboard.file' => 'File',
+    'dashboard.date' => 'Date',
+    'dashboard.computer' => 'Computer',
+    'dashboard.from_to' => 'From → To',
+    
+    // Footer
+    'footer.developed_by' => 'Developed by',
+    'footer.source_code' => 'Source code on',
 ];
