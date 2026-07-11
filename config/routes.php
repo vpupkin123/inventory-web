@@ -30,3 +30,11 @@ App::route('GET', '/computer/transfer', 'ComputerController', 'showTransfer');
 App::route('POST', '/computer/transfer', 'ComputerController', 'transfer');
 
 App::route('GET', '/transfers', 'TransferController', 'index');
+
+// User Management routes (Admin only)
+App::route('GET', '/users', 'UserController', 'index');
+App::route('GET', '/users/create', 'UserController', 'create');
+App::route('POST', '/users/store', 'UserController', 'store');
+App::route('GET', '/users/edit', 'UserController', 'edit');
+App::route('POST', '/users/update', 'UserController', 'update');
+App::route('GET', '/users/block', 'UserController', 'toggleBlock');
