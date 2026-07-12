@@ -57,13 +57,13 @@ Comprehensive documentation is provided in the **docs/** folder. All guides are 
 
 For daily users and administrators. Covers logging in, uploading reports, processing queue, transferring computers, managing users, and exporting data.
 
-[🇬🇧 English Version](docs/en_user-guide.html) [🇷🇺 Russian Version](docs/ru_user-guide.html)
+[🇬🇧 English Version](public/docs/en_user-guide.html) [🇷🇺 Russian Version](public/docs/ru_user-guide.html)
 
 #### 🛠️ Admin Guide
 
 For system administrators and developers. Covers technology stack, requirements, installation, database schema, permissions, backups, and troubleshooting.
 
-[🇬🇧 English Version](docs/en_admin-guide.html) [🇷🇺 Russian Version](docs/ru_admin-guide.html)
+[🇬🇧 English Version](public/docs/en_admin-guide.html) [🇷🇺 Russian Version](public/docs/ru_admin-guide.html)
 
 ## Administration Scripts
 
