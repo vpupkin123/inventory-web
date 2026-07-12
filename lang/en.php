@@ -239,4 +239,9 @@ return [
     'report.back_to_list' => 'Back to list',
     'report.no_files_selected' => 'No files selected.',
     'report.max_files_warning' => 'Maximum :max files at once.',
+    
+    // Dashboard documentation
+    'dashboard.documentation' => 'Documentation',
+    'dashboard.user_guide' => 'User Guide',
+    'dashboard.admin_guide' => 'Admin Guide',
 ];

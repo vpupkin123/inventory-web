@@ -84,26 +84,22 @@
         <h3 id="modal_title"><?= Lang::t('processing.configure_user') ?></h3>
         <br>
         <div class="form-group">
-            <label>Last Name:</label>
+            <label><?= Lang::t('users.last_name') ?>:</label>
             <input type="text" id="modal_last_name" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
         </div>
         <div class="form-group">
-            <label>First Name:</label>
+            <label><?= Lang::t('users.first_name') ?>:</label>
             <input type="text" id="modal_first_name" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
         </div>
         <div class="form-group">
-            <label>Middle Name:</label>
+            <label><?= Lang::t('users.middle_name') ?>:</label>
             <input type="text" id="modal_middle_name" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
         </div>
         <div class="form-group">
-            <label>Login:</label>
+            <label><?= Lang::t('users.login') ?>:</label>
             <input type="text" id="modal_login" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
             <span id="modal_login_status" style="margin-left: 10px; font-size: 0.9em;"></span>
         </div>
-        <br>
-        <button type="button" id="modal_save" class="btn"><?= Lang::t('processing.save') ?></button>
-        <button type="button" id="modal_cancel" class="btn" style="background: #6c757d;"><?= Lang::t('processing.cancel') ?></button>
-    </div>
 </div>
 
 <script>
@@ -272,7 +268,7 @@ document.getElementById('modal_save').addEventListener('click', () => {
     const login = document.getElementById('modal_login').value.trim();
     
     if (!ln || !fn || !login) {
-        alert('Please fill in Last Name, First Name, and Login.');
+        alert('<?= Lang::t('change_password.error_empty') ?>');
         return;
     }
     

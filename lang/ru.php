@@ -239,4 +239,9 @@ return [
     'report.back_to_list' => 'Вернуться к списку',
     'report.no_files_selected' => 'Не выбрано ни одного файла.',
     'report.max_files_warning' => 'Максимум :max файлов за раз.',
+
+    // Dashboard documentation
+    'dashboard.documentation' => 'Документация',
+    'dashboard.user_guide' => 'Руководство пользователя',
+    'dashboard.admin_guide' => 'Руководство администратора',
 ];
