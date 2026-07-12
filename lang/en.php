@@ -218,4 +218,25 @@ return [
     // Footer
     'footer.developed_by' => 'Developed by',
     'footer.source_code' => 'Source code on',
+
+    // Batch upload
+    'report.batch_upload' => 'Batch Upload',
+    'report.batch_description' => 'Select multiple JSON files or an entire folder with reports.',
+    'report.select_files' => 'Select Files',
+    'report.select_folder' => 'Select Folder',
+    'report.selected_files' => 'Selected Files',
+    'report.file_size' => 'Size',
+    'report.remove' => 'Remove',
+    'report.upload_all' => 'Upload All',
+    'report.uploading' => 'Uploading...',
+    'report.results' => 'Upload Results',
+    'report.success_count' => 'Successfully uploaded',
+    'report.skipped_count' => 'Skipped (duplicates)',
+    'report.error_count' => 'Errors',
+    'report.total_processed' => 'Total processed',
+    'report.skipped_files' => 'Skipped files',
+    'report.error_files' => 'Files with errors',
+    'report.back_to_list' => 'Back to list',
+    'report.no_files_selected' => 'No files selected.',
+    'report.max_files_warning' => 'Maximum :max files at once.',
 ];

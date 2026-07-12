@@ -47,3 +47,5 @@ App::route('GET', '/users/computers/remove', 'UserController', 'removeComputer')
 
 // AJAX endpoints
 App::route('GET', '/api/check-login', 'ApiController', 'checkLogin');
+
+App::route('GET', '/reports/results', 'ReportController', 'results');

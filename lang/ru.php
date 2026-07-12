@@ -218,4 +218,25 @@ return [
     // Footer
     'footer.developed_by' => 'Разработано',
     'footer.source_code' => 'Исходный код на',
+
+    // Batch upload
+    'report.batch_upload' => 'Пакетная загрузка',
+    'report.batch_description' => 'Выберите несколько JSON-файлов или целую папку с отчётами.',
+    'report.select_files' => 'Выбрать файлы',
+    'report.select_folder' => 'Выбрать папку',
+    'report.selected_files' => 'Выбрано файлов',
+    'report.file_size' => 'Размер',
+    'report.remove' => 'Удалить',
+    'report.upload_all' => 'Загрузить все',
+    'report.uploading' => 'Загрузка...',
+    'report.results' => 'Результаты загрузки',
+    'report.success_count' => 'Успешно загружено',
+    'report.skipped_count' => 'Пропущено (дубликаты)',
+    'report.error_count' => 'Ошибки',
+    'report.total_processed' => 'Всего обработано',
+    'report.skipped_files' => 'Пропущенные файлы',
+    'report.error_files' => 'Файлы с ошибками',
+    'report.back_to_list' => 'Вернуться к списку',
+    'report.no_files_selected' => 'Не выбрано ни одного файла.',
+    'report.max_files_warning' => 'Максимум :max файлов за раз.',
 ];
