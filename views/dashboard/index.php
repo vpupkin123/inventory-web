@@ -129,17 +129,17 @@
         <br>
         <div style="display: flex; gap: 15px; flex-wrap: wrap;">
             <?php if (Lang::is('ru')): ?>
-                <a href="/docs/ru_user-guide.html" target="_blank" class="btn" style="background: #17a2b8;">
+                <a href="/ru_user-guide.html" target="_blank" class="btn" style="background: #17a2b8;">
                      <?= Lang::t('dashboard.user_guide') ?>
                 </a>
-                <a href="/docs/ru_admin-guide.html" target="_blank" class="btn" style="background: #11998e;">
+                <a href="/ru_admin-guide.html" target="_blank" class="btn" style="background: #11998e;">
                     🛠️ <?= Lang::t('dashboard.admin_guide') ?>
                 </a>
             <?php else: ?>
-                <a href="/docs/en_user-guide.html" target="_blank" class="btn" style="background: #17a2b8;">
+                <a href="/en_user-guide.html" target="_blank" class="btn" style="background: #17a2b8;">
                      <?= Lang::t('dashboard.user_guide') ?>
                 </a>
-                <a href="/docs/en_admin-guide.html" target="_blank" class="btn" style="background: #11998e;">
+                <a href="/en_admin-guide.html" target="_blank" class="btn" style="background: #11998e;">
                     🛠️ <?= Lang::t('dashboard.admin_guide') ?>
                 </a>
             <?php endif; ?>

@@ -100,6 +100,11 @@
             <input type="text" id="modal_login" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 3px;">
             <span id="modal_login_status" style="margin-left: 10px; font-size: 0.9em;"></span>
         </div>
+        <br>
+        <!-- КНОПКИ -->
+        <button type="button" id="modal_save" class="btn"><?= Lang::t('processing.save') ?></button>
+        <button type="button" id="modal_cancel" class="btn" style="background: #6c757d;"><?= Lang::t('processing.cancel') ?></button>
+    </div>
 </div>
 
 <script>
