@@ -252,4 +252,5 @@ return [
     'auth.confirm_new_password' => 'Confirm New Password',
     'auth.password_mismatch' => 'Passwords do not match',
     'auth.password_updated' => 'Password updated successfully',
+    'change_password.error_invalid_current' => 'Invalid current password',
 ];

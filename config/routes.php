@@ -7,13 +7,20 @@ App::route('POST', '/lang', 'LangController', 'switch');
 App::route('GET', '/login', 'AuthController', 'showLogin');
 App::route('POST', '/login', 'AuthController', 'login');
 App::route('GET', '/logout', 'AuthController', 'logout');
+
+// Initial password change (first login)
 App::route('GET', '/change-initial-password', 'AuthController', 'showChangeInitialPassword');
 App::route('POST', '/change-initial-password', 'AuthController', 'changeInitialPassword');
+
+// Regular password change (from user menu)
+App::route('GET', '/auth/change-password', 'AuthController', 'showChangePassword');
+App::route('POST', '/auth/change-password', 'AuthController', 'changePassword');
 
 // Reports routes
 App::route('GET', '/reports', 'ReportController', 'index');
 App::route('GET', '/reports/upload', 'ReportController', 'showUpload');
 App::route('POST', '/reports/upload', 'ReportController', 'upload');
+App::route('GET', '/reports/results', 'ReportController', 'results');
 
 // Dashboard (protected)
 App::route('GET', '/', 'DashboardController', 'index');
@@ -30,7 +37,6 @@ App::route('GET', '/computer/transfer', 'ComputerController', 'showTransfer');
 App::route('POST', '/computer/transfer', 'ComputerController', 'transfer');
 App::route('GET', '/computers/export', 'ComputerController', 'export');
 App::route('GET', '/transfers/export', 'TransferController', 'export');
-
 App::route('GET', '/transfers', 'TransferController', 'index');
 
 // User Management routes (Admin only)
@@ -47,5 +53,3 @@ App::route('GET', '/users/computers/remove', 'UserController', 'removeComputer')
 
 // AJAX endpoints
 App::route('GET', '/api/check-login', 'ApiController', 'checkLogin');
-
-App::route('GET', '/reports/results', 'ReportController', 'results');

@@ -32,7 +32,6 @@ class AuthController
         $result = Auth::attempt($login, $password);
 
         if ($result['success']) {
-            // <-- ВАЖНО: Редирект на правильный маршрут
             if ($result['user']['must_change_pwd'] == 1) {
                 header('Location: /change-initial-password');
             } else {
@@ -56,6 +55,8 @@ class AuthController
         header('Location: /login');
         exit;
     }
+
+    // --- INITIAL PASSWORD CHANGE (First login) ---
 
     public function showChangeInitialPassword(): void
     {
@@ -96,12 +97,75 @@ class AuthController
 
         if (Auth::changePassword($_SESSION['user_id'], $newPassword)) {
             $_SESSION['password_success'] = Lang::t('change_password.success');
-            // <-- ВАЖНО: Редирект на главную после успешной смены (Решение Пункта 2)
-            header('Location: /dashboard');
+            header('Location: /dashboard'); // <-- ПУНКТ 2: Редирект на главную
             exit;
         } else {
             $_SESSION['password_error'] = Lang::t('change_password.error_failed');
             header('Location: /change-initial-password');
+            exit;
+        }
+    }
+
+    // --- REGULAR PASSWORD CHANGE (From menu) ---
+
+    public function showChangePassword(): void
+    {
+        Auth::requireAuth();
+
+        View::render('auth/change-password', [
+            'error' => $_SESSION['user_error'] ?? null,
+            'success' => $_SESSION['user_success'] ?? null
+        ]);
+
+        unset($_SESSION['user_error'], $_SESSION['user_success']);
+    }
+
+    public function changePassword(): void
+    {
+        Auth::requireAuth();
+        $user = Auth::user();
+
+        $currentPassword = $_POST['current_password'] ?? '';
+        $newPassword = $_POST['new_password'] ?? '';
+        $confirmPassword = $_POST['confirm_new_password'] ?? '';
+
+        if (empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
+            $_SESSION['user_error'] = Lang::t('change_password.error_empty');
+            header('Location: /auth/change-password');
+            exit;
+        }
+
+        // Verify current password
+        $pdo = Database::getConnection();
+        $stmt = $pdo->prepare("SELECT password_hash FROM users WHERE id = ?");
+        $stmt->execute([$user['id']]);
+        $currentUser = $stmt->fetch();
+
+        if (!password_verify($currentPassword, $currentUser['password_hash'])) {
+            $_SESSION['user_error'] = Lang::t('change_password.error_invalid_current');
+            header('Location: /auth/change-password');
+            exit;
+        }
+
+        if ($newPassword !== $confirmPassword) {
+            $_SESSION['user_error'] = Lang::t('change_password.error_mismatch');
+            header('Location: /auth/change-password');
+            exit;
+        }
+
+        if (strlen($newPassword) < 6) {
+            $_SESSION['user_error'] = Lang::t('change_password.error_short');
+            header('Location: /auth/change-password');
+            exit;
+        }
+
+        if (Auth::changePassword($user['id'], $newPassword)) {
+            $_SESSION['user_success'] = Lang::t('change_password.success');
+            header('Location: /dashboard');
+            exit;
+        } else {
+            $_SESSION['user_error'] = Lang::t('change_password.error_failed');
+            header('Location: /auth/change-password');
             exit;
         }
     }

@@ -252,4 +252,5 @@ return [
     'auth.confirm_new_password' => 'Подтвердите новый пароль',
     'auth.password_mismatch' => 'Пароли не совпадают',
     'auth.password_updated' => 'Пароль успешно обновлён',
+    'change_password.error_invalid_current' => 'Неверный текущий пароль',
 ];
