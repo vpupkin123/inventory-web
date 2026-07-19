@@ -244,4 +244,12 @@ return [
     'dashboard.documentation' => 'Документация',
     'dashboard.user_guide' => 'Руководство пользователя',
     'dashboard.admin_guide' => 'Руководство администратора',
+
+    // Password change
+    'auth.change_password' => 'Сменить пароль',
+    'auth.current_password' => 'Текущий пароль',
+    'auth.new_password' => 'Новый пароль',
+    'auth.confirm_new_password' => 'Подтвердите новый пароль',
+    'auth.password_mismatch' => 'Пароли не совпадают',
+    'auth.password_updated' => 'Пароль успешно обновлён',
 ];

@@ -244,4 +244,12 @@ return [
     'dashboard.documentation' => 'Documentation',
     'dashboard.user_guide' => 'User Guide',
     'dashboard.admin_guide' => 'Admin Guide',
+    
+    // Password change
+    'auth.change_password' => 'Change Password',
+    'auth.current_password' => 'Current Password',
+    'auth.new_password' => 'New Password',
+    'auth.confirm_new_password' => 'Confirm New Password',
+    'auth.password_mismatch' => 'Passwords do not match',
+    'auth.password_updated' => 'Password updated successfully',
 ];
