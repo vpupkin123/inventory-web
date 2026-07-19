@@ -9,6 +9,8 @@ App::route('POST', '/login', 'AuthController', 'login');
 App::route('GET', '/logout', 'AuthController', 'logout');
 App::route('GET', '/change-password', 'AuthController', 'showChangePassword');
 App::route('POST', '/change-password', 'AuthController', 'changePassword');
+App::route('GET', '/change-initial-password', 'AuthController', 'showChangeInitialPassword');
+App::route('POST', '/change-initial-password', 'AuthController', 'changeInitialPassword');
 
 // Reports routes
 App::route('GET', '/reports', 'ReportController', 'index');
