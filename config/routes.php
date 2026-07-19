@@ -7,8 +7,6 @@ App::route('POST', '/lang', 'LangController', 'switch');
 App::route('GET', '/login', 'AuthController', 'showLogin');
 App::route('POST', '/login', 'AuthController', 'login');
 App::route('GET', '/logout', 'AuthController', 'logout');
-App::route('GET', '/change-password', 'AuthController', 'showChangePassword');
-App::route('POST', '/change-password', 'AuthController', 'changePassword');
 App::route('GET', '/change-initial-password', 'AuthController', 'showChangeInitialPassword');
 App::route('POST', '/change-initial-password', 'AuthController', 'changeInitialPassword');
 

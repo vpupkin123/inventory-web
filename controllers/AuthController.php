@@ -32,8 +32,9 @@ class AuthController
         $result = Auth::attempt($login, $password);
 
         if ($result['success']) {
+            // <-- ВАЖНО: Редирект на правильный маршрут
             if ($result['user']['must_change_pwd'] == 1) {
-                header('Location: /change-initial-password'); // <-- ИСПРАВЛЕНО
+                header('Location: /change-initial-password');
             } else {
                 header('Location: /dashboard');
             }
@@ -56,12 +57,11 @@ class AuthController
         exit;
     }
 
-    // <-- ПЕРЕИМЕНОВАНО
     public function showChangeInitialPassword(): void
     {
         Auth::requireAuth();
 
-        View::render('auth/change-initial-password', [ // <-- ИСПРАВЛЕНО ИМЯ ФАЙЛА
+        View::render('auth/change-initial-password', [
             'error' => $_SESSION['password_error'] ?? null,
             'success' => $_SESSION['password_success'] ?? null
         ]);
@@ -69,7 +69,6 @@ class AuthController
         unset($_SESSION['password_error'], $_SESSION['password_success']);
     }
 
-    // <-- ПЕРЕИМЕНОВАНО
     public function changeInitialPassword(): void
     {
         Auth::requireAuth();
@@ -79,29 +78,30 @@ class AuthController
 
         if (empty($newPassword) || empty($confirmPassword)) {
             $_SESSION['password_error'] = Lang::t('change_password.error_empty');
-            header('Location: /change-initial-password'); // <-- ИСПРАВЛЕНО
+            header('Location: /change-initial-password');
             exit;
         }
 
         if ($newPassword !== $confirmPassword) {
             $_SESSION['password_error'] = Lang::t('change_password.error_mismatch');
-            header('Location: /change-initial-password'); // <-- ИСПРАВЛЕНО
+            header('Location: /change-initial-password');
             exit;
         }
 
         if (strlen($newPassword) < 6) {
             $_SESSION['password_error'] = Lang::t('change_password.error_short');
-            header('Location: /change-initial-password'); // <-- ИСПРАВЛЕНО
+            header('Location: /change-initial-password');
             exit;
         }
 
         if (Auth::changePassword($_SESSION['user_id'], $newPassword)) {
             $_SESSION['password_success'] = Lang::t('change_password.success');
-            header('Location: /dashboard'); // <-- РЕШЕНИЕ ПУНКТА 2: редирект на главную
+            // <-- ВАЖНО: Редирект на главную после успешной смены (Решение Пункта 2)
+            header('Location: /dashboard');
             exit;
         } else {
             $_SESSION['password_error'] = Lang::t('change_password.error_failed');
-            header('Location: /change-initial-password'); // <-- ИСПРАВЛЕНО
+            header('Location: /change-initial-password');
             exit;
         }
     }
